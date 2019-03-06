@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">PGMIS</string>
+
+    <string name="login">लॉगिन करे</string>
+    <string name="username_blank">यूजरनाम डाले</string>
+    <string name="password_blank">पासवर्ड डाले</string>
+    <string name="username_wrong">यूजरनाम या पासवर्ड गलत है</string>
+    <string name="refresh">नया डाटा डाउनलोड करे (रिफ्रेश करे)?</string>
+    <string name="remember">यूजरनाम एंड पासवर्ड याद रखे</string>
+    <string name="user_name">उपयोगकर्ता नाम</string>
+    <string name="user_password">पासवर्ड</string>
+    <string name="loading">डाटा लोड हो रहा है कृप्या रुकिए....</string>
+    <string name="try_again">पुन: प्रयास करे</string>
+    <string name="no_user_name">यूजरनाम नहीं है</string>
+    <string name="no_password">पासवर्ड नहीं है</string>
+    <string name="internet_error">इंटरनेट त्रुटि</string>
+    <string name="internet_msg">इंटरनेट नहीं है ,इंटरनेट चेक करे</string>
+    <string name="close">बंद करे</string>
+    <string name="correct_username">सही यूजरनाम , पासवर्ड डाले</string>
+    <string name="success">सफलता</string>
+    <string name="success_msg">डाटा सफलतापूर्वक डाउनलोड हुआ</string>
+    <string name="update_msg">डाटा सफलतापूर्वक अपडेट हुआ</string>
+    <string name="producer_activity_titile">प्रोडूसर ग्रुप लिस्ट</string>
+    <string name="search">खोज करें</string>
+    <string name="list_count">सूची की कुल संख्या:</string>
+    <string name="producer_group_member_title">प्रोडूसर ग्रुप मेंबर्स लिस्ट</string>
+    <string name="shg">एस एच जी:</string>
+    <string name="dashboard">डैशबोर्ड</string>
+    <string name="pleaseWait">कृपया प्रतीक्षा करें</string>
+    <string name="new_update">नया अपडेट</string>
+    <string name="new_message">कृपया अपडेट करें</string>
+    <string name="pg_mis">PG MIS</string>
+    <string name="updateApp">अपडेट</string>
+    <string name="server_error">Server Error</string>
+    <string name="wronguser">Wrong Username or Password</string>
+    <string name="select_pg">पीजी का चयन करें</string>
+
+    <string-array name="pg_list">
+        <item>abc</item>
+        <item>123</item>
+    </string-array>
+</resources>
