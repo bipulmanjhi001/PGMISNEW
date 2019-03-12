@@ -34,9 +34,42 @@
     <string name="server_error">Server Error</string>
     <string name="wronguser">Wrong Username or Password</string>
     <string name="select_pg">पीजी का चयन करें</string>
+    <string name="members_details">सदस्यों का विवरण</string>
+    <string name="farmer">किसान</string>
+    <string name="father_husband_name_shg">एस एच जी के अनुसार पिता / पति</string>
+    <string name="value">value</string>
+    <string name="colon">:</string>
+    <string name="shg_name">एस एच जी</string>
+    <string name="father_name">पिता का नाम</string>
+    <string name="husband_name">पति का नाम</string>
+    <string name="designation">पद</string>
+    <string name="primary_activity">प्राइमरी एक्टिविटी</string>
+    <string name="Fishery">फिशरी</string>
+    <string name="hva">एच भी ए</string>
+    <string name="livestock">लाइवस्टॉक</string>
+    <string name="ntfp">एन टी एफ पी</string>
+    <string name="membership_fee">सदस्यता शुल्क</string>
+    <string name="share_capital">शेयर पूंजी</string>
+    <string name="livestock_broiler">लाइवस्टॉक ब्रायलर</string>
+    <string name="livestock_goat">लाइवस्टॉक गोट</string>
+    <string name="livestock_layer">लाइवस्टॉक लेयर</string>
+    <string name="livestock_pig">लाइवस्टॉक पिग</string>
+    <string name="livestock_byp">लाइवस्टॉक बी व्हाई पि</string>
+    <string name="president">President</string>
+    <string name="Secretary">Secretary</string>
+    <string name="Treasurer">Treasurer</string>
+    <string name="Member">Member</string>
+    <string name="add_members">सदस्य जोड़ें</string>
+    <string name="select_shgg">कृपया एस एच जी चुनें</string>
+
 
     <string-array name="pg_list">
         <item>abc</item>
         <item>123</item>
+    </string-array>
+
+
+    <string-array name="select_shg">
+        <item>कृपया एस एच जी चुनेंं</item>
     </string-array>
 </resources>

@@ -47,6 +47,8 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
 
     /*Class Globals*/
     List<PgActivityModel> listPgActivity;
+    public static String pgCodeSelected="";
+    public static String pgNameSelected="";
 
 
 
@@ -125,8 +127,11 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        Intent intent = new Intent(PgActivity.this, Test.class);
-                        startActivity(intent);
+                        if(item.getId1()==1){
+                            Intent intent = new Intent(PgActivity.this, MemberDetailsActivity.class);
+                            startActivity(intent);
+                        }
+
                     }
 
                     @Override
@@ -190,6 +195,8 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                     ((TextView) parent.getChildAt(0)).setTextSize(20);
+                     pgCodeSelected = pgCodeList.get(position);
+                     pgNameSelected = pgNameList.get(position);
                 }
 
                 @Override

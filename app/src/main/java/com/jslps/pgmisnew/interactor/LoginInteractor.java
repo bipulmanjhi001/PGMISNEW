@@ -8,6 +8,8 @@ import com.jslps.pgmisnew.database.Districttbl;
 import com.jslps.pgmisnew.database.Logintbl;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
+import com.jslps.pgmisnew.database.Shgmemnonpg;
+import com.jslps.pgmisnew.database.Shgtbl;
 import com.jslps.pgmisnew.database.Villagetbl;
 import com.jslps.pgmisnew.util.CheckConnectivity;
 import com.jslps.pgmisnew.util.EncryptClass;
@@ -17,6 +19,7 @@ import com.orm.query.Select;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class LoginInteractor {
@@ -127,8 +130,34 @@ public class LoginInteractor {
                                 JSONObject pgObject = pgArray.getJSONObject(m);
                                 String pgCode = pgObject.optString("PGCode");
                                 String pgName = pgObject.optString("PGName");
+                                String primaryActivity = pgObject.optString("PrimaryActivity");
+                                String secondaryActivity = pgObject.optString("secondryActivity");
+                                List<String> secondary = Arrays.asList(secondaryActivity.split(","));
+                                String fishery="0",
+                                        hva="0",
+                                        livestock="0",
+                                        ntfp="0";
+                                if(secondary.size()>0){
+                                    for(int z=0;z<secondary.size();z++){
+                                        String code = secondary.get(z);
+                                        if(code.equals("1")){
+                                            fishery="1";
+                                        }
+                                        if(code.equals("2")){
+                                            hva="1";
+                                        }
+                                        if(code.equals("3")){
+                                            livestock="1";
+                                        }
+                                        if(code.equals("4")){
+                                            ntfp="1";
+                                        }
+                                    }
+                                }
+
+
                                 //saving to pgtbl
-                                Pgtbl dataP = new Pgtbl(villageCode,pgCode,pgName);
+                                        Pgtbl dataP = new Pgtbl(villageCode,pgCode,pgName,primaryActivity,fishery,hva,livestock,ntfp);
                                 dataP.save();
 
                                 //Grp or Pgmem
@@ -138,9 +167,66 @@ public class LoginInteractor {
                                     String GroupCode = grpObject.optString("GroupCode");
                                     String Group_M_Code = grpObject.optString("Group_M_Code");
                                     String MemberName = grpObject.optString("MemberName");
+                                    String primaryActivityM = grpObject.optString("PActivity");
+                                    String secondaryActivityM = grpObject.optString("SActivity");
+                                    String MembershipFee = grpObject.optString("MembershipFee");
+                                    String ShareCapital = grpObject.optString("ShareCapital");
+                                    String FatherName = grpObject.optString("FatherName");
+                                    String HusbandName = grpObject.optString("HusbandName");
+                                    String FatherHusbandNameinSHG = grpObject.optString("FatherHusbandNameinSHG");
+                                    String Designation = grpObject.optString("Designation");
+                                    String groupName= grpObject.optString("GroupName");
+
+                                    String fisheryM="",
+                                            hvaM="",
+                                            livestockM="",
+                                            ntfpM="";
+                                    if(!secondaryActivityM.equals("")){
+                                        String result = secondaryActivity.replaceAll("Fishery:","");
+                                        fisheryM = result.replaceAll(",HVA:0,Livestock:0,Ntfp:0","");
+
+                                        String result1 = secondaryActivity.replaceAll("Fishery:0,HVA:","");
+                                        hvaM = result1.replaceAll(",Livestock:0,Ntfp:0","");
+
+                                        String result2 = secondaryActivity.replaceAll("Fishery:0,HVA:0,Livestock:","");
+                                        livestockM = result2.replaceAll(",Ntfp:0","");
+
+                                        ntfpM = secondaryActivity.replaceAll("Fishery:0,HVA:0,Livestock:0,Ntfp:","");
+
+                                    }
+
                                     //saving to PgMemtbl
-                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName);
+                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName);
                                     dataPM.save();
+                                }
+                            }
+
+
+                            //shg
+                            JSONArray shgArray = villageObject.getJSONArray("liShg");
+                            for(int p=0;p<shgArray.length();p++){
+                                JSONObject shgObject = shgArray.getJSONObject(p);
+                                String ShgCode = shgObject.optString("ShgCode");
+                                String ShgName = shgObject.optString("ShgName");
+
+                                //saving to shgtbl
+
+                                Shgtbl datashg = new Shgtbl(villageCode,ShgCode,ShgName);
+                                datashg.save();
+
+
+                                //shgmem
+                                JSONArray shgMemArray = shgObject.getJSONArray("lisNonShg");
+                                for(int q=0;q<shgMemArray.length();q++){
+                                    JSONObject shgMemObject = shgMemArray.getJSONObject(q);
+                                    String Group_M_Code = shgMemObject.optString("Group_M_Code");
+                                    String MemberName = shgMemObject.optString("MemberName");
+                                    String FatherHusbandNameinSHG = shgMemObject.optString("FatherHusbandNameinSHG");
+
+                                    //saving to shgmemtbl
+
+                                    Shgmemnonpg dataNonpg = new Shgmemnonpg(Group_M_Code,MemberName,FatherHusbandNameinSHG);
+                                    dataNonpg.save();
                                 }
                             }
                         }
