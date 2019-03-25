@@ -2,78 +2,94 @@ package com.jslps.pgmisnew.database;
 
 import com.orm.SugarRecord;
 
-public class Pgmemtbl extends SugarRecord {
+public class Shgmemberslocallyaddedtbl extends SugarRecord {
     private String Pgcode;
     private String Grpmemcode;
     private String Grpcode;
     private String Membername;
-    private String Membershipfee;
-    private String Sharecapital;
     private String Fathername;
     private String Husbandname;
     private String Designation;
-    private String Fatherhusbandnameshg;
     private String Primaryactivity;
     private String Fishery;
     private String Hva;
     private String Ntfp;
     private String Livestock;
-    private String Grpname;
+    private String Status;
+    private String Uid;
     private String Isexported;
+    private String Gender;
+    private String Cast;
 
-    public Pgmemtbl() {
+    public Shgmemberslocallyaddedtbl() {
     }
 
-    public Pgmemtbl(String pgcode, String grpmemcode, String grpcode, String membername, String membershipfee, String sharecapital, String fathername, String husbandname, String designation, String fatherhusbandnameshg, String primaryactivity, String fishery, String hva, String ntfp, String livestock,String grpname,String isexported) {
+    public Shgmemberslocallyaddedtbl(String pgcode, String grpmemcode, String grpcode, String membername, String fathername, String husbandname, String designation, String primaryactivity, String fishery, String hva, String ntfp, String livestock, String status, String uid, String isexported, String gender, String cast) {
         Pgcode = pgcode;
         Grpmemcode = grpmemcode;
         Grpcode = grpcode;
         Membername = membername;
-        Membershipfee = membershipfee;
-        Sharecapital = sharecapital;
         Fathername = fathername;
         Husbandname = husbandname;
         Designation = designation;
-        Fatherhusbandnameshg = fatherhusbandnameshg;
         Primaryactivity = primaryactivity;
         Fishery = fishery;
         Hva = hva;
         Ntfp = ntfp;
         Livestock = livestock;
-        Grpname = grpname;
+        Status = status;
+        Uid = uid;
         Isexported = isexported;
+        Gender = gender;
+        Cast = cast;
     }
 
-    public String getIsexported() {
-        return Isexported;
+    public String getGender() {
+        return Gender;
     }
 
-    public void setIsexported(String isexported) {
-        Isexported = isexported;
+    public void setGender(String gender) {
+        Gender = gender;
     }
 
-    public String getGrpname() {
-        return Grpname;
+    public String getCast() {
+        return Cast;
     }
 
-    public void setGrpname(String grpname) {
-        Grpname = grpname;
+    public void setCast(String cast) {
+        Cast = cast;
     }
 
-    public String getMembershipfee() {
-        return Membershipfee;
+    public String getPgcode() {
+        return Pgcode;
     }
 
-    public void setMembershipfee(String membershipfee) {
-        Membershipfee = membershipfee;
+    public void setPgcode(String pgcode) {
+        Pgcode = pgcode;
     }
 
-    public String getSharecapital() {
-        return Sharecapital;
+    public String getGrpmemcode() {
+        return Grpmemcode;
     }
 
-    public void setSharecapital(String sharecapital) {
-        Sharecapital = sharecapital;
+    public void setGrpmemcode(String grpmemcode) {
+        Grpmemcode = grpmemcode;
+    }
+
+    public String getGrpcode() {
+        return Grpcode;
+    }
+
+    public void setGrpcode(String grpcode) {
+        Grpcode = grpcode;
+    }
+
+    public String getMembername() {
+        return Membername;
+    }
+
+    public void setMembername(String membername) {
+        Membername = membername;
     }
 
     public String getFathername() {
@@ -98,14 +114,6 @@ public class Pgmemtbl extends SugarRecord {
 
     public void setDesignation(String designation) {
         Designation = designation;
-    }
-
-    public String getFatherhusbandnameshg() {
-        return Fatherhusbandnameshg;
-    }
-
-    public void setFatherhusbandnameshg(String fatherhusbandnameshg) {
-        Fatherhusbandnameshg = fatherhusbandnameshg;
     }
 
     public String getPrimaryactivity() {
@@ -148,35 +156,27 @@ public class Pgmemtbl extends SugarRecord {
         Livestock = livestock;
     }
 
-    public String getPgcode() {
-        return Pgcode;
+    public String getStatus() {
+        return Status;
     }
 
-    public void setPgcode(String pgcode) {
-        Pgcode = pgcode;
+    public void setStatus(String status) {
+        Status = status;
     }
 
-    public String getGrpmemcode() {
-        return Grpmemcode;
+    public String getUid() {
+        return Uid;
     }
 
-    public void setGrpmemcode(String grpmemcode) {
-        Grpmemcode = grpmemcode;
+    public void setUid(String uid) {
+        Uid = uid;
     }
 
-    public String getGrpcode() {
-        return Grpcode;
+    public String getIsexported() {
+        return Isexported;
     }
 
-    public void setGrpcode(String grpcode) {
-        Grpcode = grpcode;
-    }
-
-    public String getMembername() {
-        return Membername;
-    }
-
-    public void setMembername(String membername) {
-        Membername = membername;
+    public void setIsexported(String isexported) {
+        Isexported = isexported;
     }
 }

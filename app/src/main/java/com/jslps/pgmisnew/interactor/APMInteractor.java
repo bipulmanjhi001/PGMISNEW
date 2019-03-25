@@ -4,6 +4,7 @@ import com.jslps.pgmisnew.database.Districttbl;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
 import com.jslps.pgmisnew.database.ShgModel;
+import com.jslps.pgmisnew.database.Shgmemnonpg;
 import com.jslps.pgmisnew.database.Shgtbl;
 import com.orm.query.Condition;
 import com.orm.query.Select;
@@ -15,6 +16,7 @@ public class APMInteractor {
 
     public interface apmInteractor {
         void getShg(List<ShgModel> list);
+        void getShgNonPgMem(List<Shgmemnonpg> list);
 
     }
 
@@ -40,5 +42,14 @@ public class APMInteractor {
             }
         }
        listener.getShg(shgModelList);
+    }
+
+    public void getShgNonPgMem(final  apmInteractor listner,String shgCode){
+        List<Shgmemnonpg> list = Select.from(Shgmemnonpg.class)
+                .where(Condition.prop("Shgcode").eq(shgCode))
+                .where(Condition.prop("Addedtopg").eq("0"))
+                .list();
+
+        listner.getShgNonPgMem(list);
     }
 }

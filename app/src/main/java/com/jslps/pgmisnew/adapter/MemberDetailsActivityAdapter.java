@@ -31,8 +31,8 @@ public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDet
     class MyViewHolder extends RecyclerView.ViewHolder  {
         TextView farmername,fatherhusbandshg,shg,fathername,husbandname,designation,primaryactivity,fishery,hva,livestock,ntfp,memfee,sharecapital;
         View viewlayout;
-        ConstraintLayout constraintLayout;
-        ImageView dropDown;
+        ConstraintLayout constraintLayout,constraintLayout1;
+        ImageView dropDown,edit,delete;
         MyViewHolder(View view) {
             super(view);
             farmername = view.findViewById(R.id.textView9);
@@ -49,8 +49,11 @@ public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDet
             memfee = view.findViewById(R.id.textView45);
             sharecapital = view.findViewById(R.id.textView48);
             constraintLayout = view.findViewById(R.id.secondLayout);
+            constraintLayout1 = view.findViewById(R.id.firstLayout);
             viewlayout = view.findViewById(R.id.view);
             dropDown = view.findViewById(R.id.imageView7);
+            edit = view.findViewById(R.id.imageView10);
+            delete = view.findViewById(R.id.imageView6);
             }
 
     }
@@ -73,6 +76,9 @@ public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDet
     @Override
     public void onBindViewHolder(@NotNull MemberDetailsActivityAdapter.MyViewHolder holder, int position) {
         presenter.setViewAdapter(
+                holder.constraintLayout1,
+                holder.edit,
+                holder.delete,
                 holder.dropDown,
                 holder.farmername,
                 holder.fatherhusbandshg,

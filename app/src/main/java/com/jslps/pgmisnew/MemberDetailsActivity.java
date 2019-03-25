@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -123,8 +124,21 @@ public class MemberDetailsActivity extends AppCompatActivity implements MDAView 
     }
 
     @Override
-    public void setViewAdapter(ImageView dropDown, TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPostion) {
+    public void setViewAdapter(ConstraintLayout firstLayout,ImageView edit,ImageView delete,ImageView dropDown, TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPostion) {
         Pgmemtbl item = pgmemtblList.get(adapterPostion);
+
+        //visbility of edit and delete icons
+        if(item.getIsexported().equals("1")){
+            edit.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
+            firstLayout.setBackgroundResource(R.drawable.item_border_view_pg_activity);
+
+        }else{
+            edit.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.VISIBLE);
+            firstLayout.setBackgroundResource(R.drawable.item_border_light_green);
+        }
+
         if (adapterPostion == 0) {
             viewLayout.setVisibility(View.VISIBLE);
         } else {
@@ -208,5 +222,12 @@ public class MemberDetailsActivity extends AppCompatActivity implements MDAView 
         sharecapital.setText(item.getSharecapital());
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.getPgMem(PgActivity.pgCodeSelected);
+        presenter.setRecyclerView();
     }
 }

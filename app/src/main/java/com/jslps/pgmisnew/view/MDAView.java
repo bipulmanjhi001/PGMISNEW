@@ -20,5 +20,5 @@ public interface MDAView {
 
     void setPgName();
 
-    void setViewAdapter(ImageView dropDown,TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPosition);
+    void setViewAdapter(ConstraintLayout firstLayout,ImageView edit,ImageView delete, ImageView dropDown,TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPosition);
 }

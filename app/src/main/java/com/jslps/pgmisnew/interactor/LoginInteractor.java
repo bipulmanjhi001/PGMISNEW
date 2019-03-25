@@ -66,6 +66,8 @@ public class LoginInteractor {
                     Pgmemtbl.deleteAll(Pgmemtbl.class);
                     Pgtbl.deleteAll(Pgtbl.class);
                     Villagetbl.deleteAll(Villagetbl.class);
+                    Shgmemnonpg.deleteAll(Shgmemnonpg.class);
+                    Shgtbl.deleteAll(Shgtbl.class);
 
                     listener.callLoginApi();
                 }
@@ -176,6 +178,7 @@ public class LoginInteractor {
                                     String FatherHusbandNameinSHG = grpObject.optString("FatherHusbandNameinSHG");
                                     String Designation = grpObject.optString("Designation");
                                     String groupName= grpObject.optString("GroupName");
+                                    String Isexported ="1";
 
                                     String fisheryM="",
                                             hvaM="",
@@ -196,7 +199,7 @@ public class LoginInteractor {
                                     }
 
                                     //saving to PgMemtbl
-                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName);
+                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName,Isexported);
                                     dataPM.save();
                                 }
                             }
@@ -225,7 +228,7 @@ public class LoginInteractor {
 
                                     //saving to shgmemtbl
 
-                                    Shgmemnonpg dataNonpg = new Shgmemnonpg(Group_M_Code,MemberName,FatherHusbandNameinSHG);
+                                    Shgmemnonpg dataNonpg = new Shgmemnonpg(Group_M_Code,MemberName,FatherHusbandNameinSHG,ShgCode,"0");
                                     dataNonpg.save();
                                 }
                             }

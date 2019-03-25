@@ -9,4 +9,5 @@
     <color name="colorlightGray">#f6f6f6</color>
     <color name="colorGrayHint">#939393</color>
     <color name="colorBlack">#000</color>
+    <color name="green_light">#ccffcc</color>
 </resources>

@@ -37,8 +37,8 @@ public class MDAPresenter implements MDAInteractor.mdaInteractor {
         mdaView.setRecyclerView();
     }
 
-    public void setViewAdapter(ImageView dropDown,TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPosition) {
-        mdaView.setViewAdapter(dropDown,farmername,fatherhusbandshg,shg,fathername,husbandname,designation,primaryactivity,fishery,hva,livestock, ntfp,memfee,sharecapital,viewLayout,layout,adapterPosition);
+    public void setViewAdapter(ConstraintLayout firstLayout,ImageView edit,ImageView delete,ImageView dropDown,TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPosition) {
+        mdaView.setViewAdapter(firstLayout,edit,delete,dropDown,farmername,fatherhusbandshg,shg,fathername,husbandname,designation,primaryactivity,fishery,hva,livestock, ntfp,memfee,sharecapital,viewLayout,layout,adapterPosition);
     }
 
     public void moveToNextActivity(){
