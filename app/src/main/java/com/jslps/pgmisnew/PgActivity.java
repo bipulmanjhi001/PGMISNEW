@@ -155,8 +155,14 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        Intent intent = new Intent(PgActivity.this, Test.class);
-                        startActivity(intent);
+                        if(item.getId2()==2){
+                            Intent intent = new Intent(PgActivity.this, MemberShipFeeActivity.class);
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(PgActivity.this, Test.class);
+                            startActivity(intent);
+                        }
+
                     }
 
                     @Override

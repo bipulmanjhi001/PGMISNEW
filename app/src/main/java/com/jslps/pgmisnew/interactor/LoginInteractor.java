@@ -179,6 +179,7 @@ public class LoginInteractor {
                                     String Designation = grpObject.optString("Designation");
                                     String groupName= grpObject.optString("GroupName");
                                     String Isexported ="1";
+                                    String Isupdated ="0";
 
                                     String fisheryM="",
                                             hvaM="",
@@ -199,7 +200,7 @@ public class LoginInteractor {
                                     }
 
                                     //saving to PgMemtbl
-                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName,Isexported);
+                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName,Isexported,Isupdated);
                                     dataPM.save();
                                 }
                             }

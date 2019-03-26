@@ -11,4 +11,11 @@ public class AppConstant {
 
     //table indentifier
     public static final String logintbl ="1";
+
+
+
+    //Fixed Amounts
+
+    public static final String MEMBERSHIPFEE="100";
+
 }
