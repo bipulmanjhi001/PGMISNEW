@@ -1,0 +1,86 @@
+package com.jslps.pgmisnew.adapter;
+
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.jslps.pgmisnew.R;
+import com.jslps.pgmisnew.database.Pgmemtbl;
+import com.jslps.pgmisnew.presenter.MFAPresenter;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+
+/**
+ * Created by sonu on 4/4/2018.
+ */
+
+public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShipFeeActivityAdapter.MyViewHolder> {
+
+    private List<Pgmemtbl> list;
+    private MFAPresenter presenter;
+
+
+    class MyViewHolder extends RecyclerView.ViewHolder  {
+        TextView farmer,total,paid,remaining;
+        ConstraintLayout firstLayout;
+        TextInputEditText enterAmount;
+        CheckBox checkBox;
+        View viewlayout;
+        MyViewHolder(View view) {
+            super(view);
+            farmer = view.findViewById(R.id.textView7);
+            total = view.findViewById(R.id.textView57);
+            paid = view.findViewById(R.id.textView58);
+            remaining = view.findViewById(R.id.textView61);
+            firstLayout = view.findViewById(R.id.firstLayout);
+            viewlayout = view.findViewById(R.id.view);
+            enterAmount = view.findViewById(R.id.et_member_fee);
+            checkBox = view.findViewById(R.id.checkBox);
+            }
+
+    }
+
+    public MemberShipFeeActivityAdapter(MFAPresenter presenter, List<Pgmemtbl> itemList) {
+        this.presenter = presenter;
+        this.list = itemList;
+
+    }
+
+    @NotNull
+    @Override
+    public MemberShipFeeActivityAdapter.MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.view_membershipfee, parent, false);
+
+        return new MemberShipFeeActivityAdapter.MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NotNull MemberShipFeeActivityAdapter.MyViewHolder holder, int position) {
+        presenter.setViewAdapter(
+               holder.firstLayout,
+                holder.farmer,
+                holder.total,
+                holder.paid,
+                holder.remaining,
+                holder.enterAmount,
+                holder.viewlayout,
+                position,
+                holder.checkBox); }
+
+
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+}

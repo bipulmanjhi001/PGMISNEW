@@ -381,6 +381,7 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
                             ntfp,
                             livestock,
                             grpName,
+                            "0",
                             "0");
 
                     data.save();
@@ -770,6 +771,7 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
                             ntfp,
                             livestock,
                             shgNameSelected,
+                            "0",
                             "0");
 
                     data.save();

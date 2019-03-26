@@ -16,7 +16,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".MemberShipFeeActivity"></activity>
+        <activity android:name=".MemberShipFeeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".AddPgMemberActivity"
             android:screenOrientation="portrait"

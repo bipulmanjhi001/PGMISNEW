@@ -73,6 +73,9 @@
     <string name="male">पुरुष</string>
     <string name="female">महिला</string>
     <string name="cast">जाति का चयन करें</string>
+    <string name="enter_mebership_fee">सदस्यता शुल्क दर्ज करें</string>
+    <string name="cant_be_greater">दर्ज राशि शेष राशि से अधिक नहीं हो सकती</string>
+    <string name="at_least_one_amount">कृपया कम से कम एक राशि दर्ज करें</string>
 
 
     <string-array name="pg_list">
