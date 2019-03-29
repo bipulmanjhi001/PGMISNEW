@@ -2,6 +2,8 @@ package com.jslps.pgmisnew;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -10,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -48,6 +51,8 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
     TextView tvPgName;
     @BindView(R.id.save)
     Button btnSave;
+    @BindView(R.id.parentContainer)
+    ConstraintLayout parentContainer;
 
     /*Defining objects*/
     MFAPresenter presenter;
@@ -79,6 +84,9 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
         presenter.setZoomIn();
         presenter.setPgname();
         presenter.setRecyclerView();
+
+
+
     }
 
     @Override
@@ -98,8 +106,9 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
     }
 
     @Override
-    public void setViewAdapter(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox) {
-        Pgmemtbl item = pgmemtblList.get(adapterPosition);
+    public void setViewAdapter(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox, TextView pos) {
+        pos.setText(adapterPosition + "");
+        Pgmemtbl item = pgmemtblList.get(Integer.parseInt(pos.getText().toString()));
         if (adapterPosition == 0) {
             viewLayout.setVisibility(View.VISIBLE);
         } else {
@@ -122,28 +131,49 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
 
         float remainingAmount = Float.parseFloat(AppConstant.MEMBERSHIPFEE) - Float.parseFloat(paidS);
         remaining.setText(String.format("%s", remainingAmount));
-        if(remainingAmount==0){
+        if (remainingAmount == 0) {
             firstLayout.setBackgroundResource(R.drawable.item_border_light_green);
-        }else{
+        } else {
             firstLayout.setBackgroundResource(R.drawable.item_border_view_pg_activity);
         }
 
-        //clearing enterAmount
-        enterAmount.setText("");
-        checkBox.setChecked(false);
 
         if (membershipFeeModelList.size() > 0) {
-            for (int i = 0; i < membershipFeeModelList.size(); i++) {
-                String adapterPositionM = membershipFeeModelList.get(i).getAdapterposition();
-                if (adapterPositionM.equals(adapterPosition + "")) {
-                    enterAmount.setText(membershipFeeModelList.get(i).getAmount());
-                    checkBox.setChecked(true);
-                }
+
+            String amount = membershipFeeModelList.get(adapterPosition).getAmount();
+            if (amount != null) {
+                setEditTextByCode = true;
+                enterAmount.setText(membershipFeeModelList.get(adapterPosition).getAmount());
+
+
+            } else {
+                //clearing enterAmount
+                //setEditTextByCode = true;
+                setEditTextByCode = true;
+                enterAmount.setText("");
+
 
             }
+
         }
 
 
+
+    }
+
+    private void timeDelay() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                setEditTextByCode = false;
+            }
+        }, 500);
+    }
+
+    @Override
+    public void addTextChangeListner(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox, TextView pos) {
         enterAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,9 +182,28 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!enterAmount.getText().toString().equals("")) {
-                    float userEnteredAmount = Float.parseFloat(enterAmount.getText().toString());
-                    if (userEnteredAmount > remainingAmount) {
+
+                if (!enterAmount.getText().equals("") && !setEditTextByCode) {
+                    Pgmemtbl item = pgmemtblList.get(Integer.parseInt(pos.getText().toString()));
+
+                    String paidS;
+                    if (item.getMembershipfee() != null) {
+                        paidS = item.getMembershipfee();
+                        if (item.getMembershipfee().equals("") || item.getMembershipfee().equals("null")) {
+                            paidS = "0";
+                        }
+                    } else {
+                        paidS = "0";
+                    }
+                    String finalPaidS = paidS;
+                    float remainingAmount = Float.parseFloat(AppConstant.MEMBERSHIPFEE) - Float.parseFloat(paidS);
+                    String ss = enterAmount.getText().toString();
+                    if (ss.equals("")) {
+                        ss = "0";
+                    }
+
+
+                    if (Float.parseFloat(ss) > remainingAmount) {
                         new StyleableToast
                                 .Builder(MemberShipFeeActivity.this)
                                 .text(getString(R.string.cant_be_greater))
@@ -162,9 +211,26 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
                                 .textColor(Color.WHITE)
                                 .backgroundColor(getResources().getColor(R.color.colorPrimary))
                                 .show();
+                        setEditTextByCode = true;
                         enterAmount.setText("");
+                        timeDelay();
+                        if (membershipFeeModelList.size() > 0) {
+                            add(item, enterAmount, Integer.parseInt(pos.getText().toString()), finalPaidS);
+
+                        }
+
+                    } else {
+
+                        if (membershipFeeModelList.size() > 0) {
+                            add(item, enterAmount, Integer.parseInt(pos.getText().toString()), finalPaidS);
+                        }
+
+
                     }
 
+
+                }else{
+                    setEditTextByCode=false;
                 }
 
             }
@@ -174,48 +240,23 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
 
             }
         });
+    }
 
-        String finalPaidS = paidS;
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isChecked = checkBox.isChecked();
-                if (isChecked) {
-                    if (enterAmount.getText().toString().equals("")) {
-                        checkBox.setChecked(false);
-                        new StyleableToast
-                                .Builder(MemberShipFeeActivity.this)
-                                .text(getString(R.string.enter_mebership_fee))
-                                .iconStart(R.drawable.wrong_icon_white)
-                                .textColor(Color.WHITE)
-                                .backgroundColor(getResources().getColor(R.color.colorPrimary))
-                                .show();
-                    } else {
-                        MembershipFeeModel model = new MembershipFeeModel();
-                        model.setPgcode(PgActivity.pgCodeSelected);
-                        model.setPgmemcode(item.getGrpmemcode());
-                        model.setGrpcode(item.getGrpcode());
-                        model.setAdapterposition(adapterPosition + "");
-                        model.setAmount(enterAmount.getText().toString());
-                        float calculatedAmount = Float.parseFloat(enterAmount.getText().toString())+Float.parseFloat(finalPaidS);
-                        model.setUpdateamount(calculatedAmount+"");
-                        membershipFeeModelList.add(model);
-                    }
-
-                } else {
-                    if (membershipFeeModelList.size() > 0) {
-                        for (int i = 0; i < membershipFeeModelList.size(); i++) {
-                            int value = Integer.parseInt(membershipFeeModelList.get(i).getAdapterposition());
-                            if (value == adapterPosition) {
-                                membershipFeeModelList.remove(i);
-                            }
-                        }
-                    }
-
-                }
-            }
-        });
-
+    private void add(Pgmemtbl item, TextInputEditText enterAmount, int adapterPosition, String finalPaidS) {
+        MembershipFeeModel model = new MembershipFeeModel();
+        model.setPgcode(PgActivity.pgCodeSelected);
+        model.setPgmemcode(item.getGrpmemcode());
+        model.setGrpcode(item.getGrpcode());
+        model.setAdapterposition(adapterPosition + "");
+        model.setAmount(enterAmount.getText().toString());
+        String amt = enterAmount.getText().toString();
+        if (amt.equals("")) {
+            amt = "0";
+        }
+        float calculatedAmount = Float.parseFloat(amt) + Float.parseFloat(finalPaidS);
+        model.setUpdateamount(calculatedAmount + "");
+        membershipFeeModelList.set(adapterPosition, model);
+        System.out.print("");
     }
 
     @Override
@@ -226,48 +267,74 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
         recylerList.setLayoutManager(verticalLayoutmanager);
         recylerList.setAdapter(aAdapter);
         membershipFeeModelList = new ArrayList<>();
+        if (pgmemtblList.size() > 0) {
+            for (int i = 0; i < pgmemtblList.size(); i++) {
+                MembershipFeeModel model = new MembershipFeeModel();
+                model.setAdapterposition("");
+                membershipFeeModelList.add(model);
+
+            }
+        }
+
 
         //Applying animation to recyclerview
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down);
         recylerList.setLayoutAnimation(animation);
+
+
     }
 
 
     @OnClick(R.id.save)
     public void onViewClicked() {
-        if(membershipFeeModelList.size()>0){
-            for(int i =0;i<membershipFeeModelList.size();i++){
-               String pgCode = membershipFeeModelList.get(i).getPgcode();
-               String grpMemCode = membershipFeeModelList.get(i).getPgmemcode();
-               String grpCode = membershipFeeModelList.get(i).getGrpcode();
-               String calculatedAmount = membershipFeeModelList.get(i).getUpdateamount();
+        int count = 0;
+        if (membershipFeeModelList.size() > 0) {
+            for (int i = 0; i < membershipFeeModelList.size(); i++) {
+                String pgCode = membershipFeeModelList.get(i).getPgcode();
+                String grpMemCode = membershipFeeModelList.get(i).getPgmemcode();
+                String grpCode = membershipFeeModelList.get(i).getGrpcode();
+                String calculatedAmount = membershipFeeModelList.get(i).getUpdateamount();
+                String amount = membershipFeeModelList.get(i).getAmount();
 
-               List<Pgmemtbl> list = Select.from(Pgmemtbl.class)
-                        .where(Condition.prop("Pgcode").eq(pgCode))
-                        .where(Condition.prop("Grpmemcode").eq(grpMemCode))
-                        .where(Condition.prop("Grpcode").eq(grpCode))
-                        .list();
-               list.get(0).setMembershipfee(calculatedAmount);
-               list.get(0).setIsupdated("1");
-               list.get(0).save();
+                if (amount == null) {
+                    count++;
+                }
+
+                if (amount != null) {
+                    if (!amount.equals("")) {
+                        List<Pgmemtbl> list = Select.from(Pgmemtbl.class)
+                                .where(Condition.prop("Pgcode").eq(pgCode))
+                                .where(Condition.prop("Grpmemcode").eq(grpMemCode))
+                                .where(Condition.prop("Grpcode").eq(grpCode))
+                                .list();
+                        list.get(0).setMembershipfee(calculatedAmount);
+                        list.get(0).setIsupdated("1");
+                        list.get(0).save();
+                    }
+
+                }
+
             }
-            presenter.getPgMem(PgActivity.pgCodeSelected);
-            presenter.setRecyclerView();
-            new StyleableToast
-                    .Builder(MemberShipFeeActivity.this)
-                    .text(getString(R.string.saved))
-                    .iconStart(R.drawable.right)
-                    .textColor(Color.WHITE)
-                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
-                    .show();
-        }else{
-            new StyleableToast
-                    .Builder(MemberShipFeeActivity.this)
-                    .text(getString(R.string.at_least_one_amount))
-                    .iconStart(R.drawable.wrong_icon_white)
-                    .textColor(Color.WHITE)
-                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
-                    .show();
+            if (count == membershipFeeModelList.size()) {
+                new StyleableToast
+                        .Builder(MemberShipFeeActivity.this)
+                        .text(getString(R.string.at_least_one_amount))
+                        .iconStart(R.drawable.wrong_icon_white)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+            } else {
+                presenter.getPgMem(PgActivity.pgCodeSelected);
+                presenter.setRecyclerView();
+                new StyleableToast
+                        .Builder(MemberShipFeeActivity.this)
+                        .text(getString(R.string.saved))
+                        .iconStart(R.drawable.right)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+            }
+
         }
     }
 }

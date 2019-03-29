@@ -38,12 +38,16 @@ public class MFAPresenter implements MFAInteractor.mfaInteractor {
         mfaView.setPgName();
     }
 
-    public void setViewAdapter(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox) {
-        mfaView.setViewAdapter(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox);
+    public void setViewAdapter(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox,TextView pos) {
+        mfaView.setViewAdapter(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox,pos);
     }
 
     public void setRecyclerView(){
         mfaView.setRecyclerView();
+    }
+
+    public void addTextChangeListner(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox,TextView pos){
+        mfaView.addTextChangeListner(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox,pos);
     }
 
 }

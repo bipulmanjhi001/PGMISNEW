@@ -3,6 +3,8 @@ package com.jslps.pgmisnew.adapter;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,7 @@ public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShi
 
 
     class MyViewHolder extends RecyclerView.ViewHolder  {
-        TextView farmer,total,paid,remaining;
+        TextView farmer,total,paid,remaining,textView62;
         ConstraintLayout firstLayout;
         TextInputEditText enterAmount;
         CheckBox checkBox;
@@ -45,7 +47,13 @@ public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShi
             viewlayout = view.findViewById(R.id.view);
             enterAmount = view.findViewById(R.id.et_member_fee);
             checkBox = view.findViewById(R.id.checkBox);
+            textView62 = view.findViewById(R.id.textView62);
+
+            presenter.addTextChangeListner(firstLayout,
+                    farmer,total,paid,remaining,enterAmount,viewlayout,getAdapterPosition(),checkBox,textView62);
+
             }
+
 
     }
 
@@ -75,7 +83,13 @@ public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShi
                 holder.enterAmount,
                 holder.viewlayout,
                 position,
-                holder.checkBox); }
+                holder.checkBox,
+                holder.textView62);
+
+
+    }
+
+
 
 
 
