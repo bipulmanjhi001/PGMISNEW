@@ -17,5 +17,6 @@ public class AppConstant {
     //Fixed Amounts
 
     public static final String MEMBERSHIPFEE="100";
+    public static final String SHARECAPITAL="1000";
 
 }

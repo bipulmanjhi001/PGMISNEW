@@ -130,6 +130,12 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
                         if(item.getId1()==1){
                             Intent intent = new Intent(PgActivity.this, MemberDetailsActivity.class);
                             startActivity(intent);
+                        }else if(item.getId1()==3){
+                            Intent intent = new Intent(PgActivity.this, ShareCapitalActivity.class);
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(PgActivity.this, Test.class);
+                            startActivity(intent);
                         }
 
                     }
@@ -158,7 +164,7 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
                         if(item.getId2()==2){
                             Intent intent = new Intent(PgActivity.this, MemberShipFeeActivity.class);
                             startActivity(intent);
-                        }else{
+                        }else {
                             Intent intent = new Intent(PgActivity.this, Test.class);
                             startActivity(intent);
                         }
