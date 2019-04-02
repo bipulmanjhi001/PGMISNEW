@@ -3,18 +3,16 @@ package com.jslps.pgmisnew.adapter;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jslps.pgmisnew.R;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.presenter.MFAPresenter;
+import com.jslps.pgmisnew.presenter.SHAPresenter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,10 +23,10 @@ import java.util.List;
  * Created by sonu on 4/4/2018.
  */
 
-public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShipFeeActivityAdapter.MyViewHolder> {
+public class ShareCapitalActivityAdapter extends RecyclerView.Adapter<ShareCapitalActivityAdapter.MyViewHolder> {
 
     private List<Pgmemtbl> list;
-    private MFAPresenter presenter;
+    private SHAPresenter presenter;
 
 
     class MyViewHolder extends RecyclerView.ViewHolder  {
@@ -57,7 +55,7 @@ public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShi
 
     }
 
-    public MemberShipFeeActivityAdapter(MFAPresenter presenter, List<Pgmemtbl> itemList) {
+    public ShareCapitalActivityAdapter(SHAPresenter presenter, List<Pgmemtbl> itemList) {
         this.presenter = presenter;
         this.list = itemList;
 
@@ -65,15 +63,15 @@ public class MemberShipFeeActivityAdapter extends RecyclerView.Adapter<MemberShi
 
     @NotNull
     @Override
-    public MemberShipFeeActivityAdapter.MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+    public ShareCapitalActivityAdapter.MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_membershipfee, parent, false);
 
-        return new MemberShipFeeActivityAdapter.MyViewHolder(itemView);
+        return new ShareCapitalActivityAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NotNull MemberShipFeeActivityAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NotNull ShareCapitalActivityAdapter.MyViewHolder holder, int position) {
         presenter.setViewAdapter(
                holder.firstLayout,
                 holder.farmer,

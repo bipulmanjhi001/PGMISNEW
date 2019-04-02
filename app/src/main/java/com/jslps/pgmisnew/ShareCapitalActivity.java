@@ -1,18 +1,16 @@
 package com.jslps.pgmisnew;
 
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -23,12 +21,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jslps.pgmisnew.adapter.MemberShipFeeActivityAdapter;
+import com.jslps.pgmisnew.adapter.ShareCapitalActivityAdapter;
 import com.jslps.pgmisnew.database.MembershipFeeModel;
 import com.jslps.pgmisnew.database.Pgmemtbl;
-import com.jslps.pgmisnew.interactor.MFAInteractor;
-import com.jslps.pgmisnew.presenter.MFAPresenter;
+import com.jslps.pgmisnew.interactor.SHAInteractor;
+import com.jslps.pgmisnew.presenter.SHAPresenter;
 import com.jslps.pgmisnew.util.AppConstant;
-import com.jslps.pgmisnew.view.MFAView;
+import com.jslps.pgmisnew.view.SHAView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.orm.query.Condition;
 import com.orm.query.Select;
@@ -40,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MemberShipFeeActivity extends AppCompatActivity implements MFAView {
+public class ShareCapitalActivity extends AppCompatActivity implements SHAView {
     @BindView(R.id.imageView2)
     ImageView headerImg;
     @BindView(R.id.recyler_list)
@@ -54,10 +53,10 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
     @BindView(R.id.parentContainer)
     ConstraintLayout parentContainer;
 
-    /*Defining objects*/
-    MFAPresenter presenter;
-    MemberShipFeeActivityAdapter aAdapter;
 
+    /*Defining objects*/
+    SHAPresenter presenter;
+    ShareCapitalActivityAdapter aAdapter;
 
     /*Class Globals*/
     List<Pgmemtbl> pgmemtblList;
@@ -65,11 +64,10 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
     boolean setEditTextByCode = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_member_ship_fee);
+        setContentView(R.layout.activity_share_capital);
         ButterKnife.bind(this);
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         init();
@@ -77,7 +75,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
 
     private void init() {
         /*initialiazation*/
-        presenter = new MFAPresenter(this, new MFAInteractor());
+        presenter = new SHAPresenter(this, new SHAInteractor());
 
         /*calling presenter methods*/
         presenter.getPgMem(PgActivity.pgCodeSelected);
@@ -116,11 +114,11 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
         }
 
         farmer.setText(String.format("%s(%s)", item.getMembername(), item.getGrpname()));
-        total.setText(AppConstant.MEMBERSHIPFEE);
+        total.setText(AppConstant.SHARECAPITAL);
         String paidS;
-        if (item.getMembershipfee() != null) {
-            paidS = item.getMembershipfee();
-            if (item.getMembershipfee().equals("") || item.getMembershipfee().equals("null")) {
+        if (item.getSharecapital() != null) {
+            paidS = item.getSharecapital();
+            if (item.getSharecapital().equals("") || item.getSharecapital().equals("null")) {
                 paidS = "0";
             }
             paid.setText(paidS);
@@ -129,7 +127,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
             paid.setText(paidS);
         }
 
-        float remainingAmount = Float.parseFloat(AppConstant.MEMBERSHIPFEE) - Float.parseFloat(paidS);
+        float remainingAmount = Float.parseFloat(AppConstant.SHARECAPITAL) - Float.parseFloat(paidS);
         remaining.setText(String.format("%s", remainingAmount));
         if (remainingAmount == 0) {
             firstLayout.setBackgroundResource(R.drawable.item_border_light_green);
@@ -187,16 +185,16 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
                     Pgmemtbl item = pgmemtblList.get(Integer.parseInt(pos.getText().toString()));
 
                     String paidS;
-                    if (item.getMembershipfee() != null) {
-                        paidS = item.getMembershipfee();
-                        if (item.getMembershipfee().equals("") || item.getMembershipfee().equals("null")) {
+                    if (item.getSharecapital() != null) {
+                        paidS = item.getSharecapital();
+                        if (item.getSharecapital().equals("") || item.getSharecapital().equals("null")) {
                             paidS = "0";
                         }
                     } else {
                         paidS = "0";
                     }
                     String finalPaidS = paidS;
-                    float remainingAmount = Float.parseFloat(AppConstant.MEMBERSHIPFEE) - Float.parseFloat(paidS);
+                    float remainingAmount = Float.parseFloat(AppConstant.SHARECAPITAL) - Float.parseFloat(paidS);
                     String ss = enterAmount.getText().toString();
                     if (ss.equals("")) {
                         ss = "0";
@@ -205,7 +203,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
 
                     if (Float.parseFloat(ss) > remainingAmount) {
                         new StyleableToast
-                                .Builder(MemberShipFeeActivity.this)
+                                .Builder(ShareCapitalActivity.this)
                                 .text(getString(R.string.cant_be_greater))
                                 .iconStart(R.drawable.wrong_icon_white)
                                 .textColor(Color.WHITE)
@@ -261,7 +259,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
 
     @Override
     public void setRecyclerView() {
-        aAdapter = new MemberShipFeeActivityAdapter(presenter, pgmemtblList);
+        aAdapter = new ShareCapitalActivityAdapter(presenter, pgmemtblList);
         LinearLayoutManager verticalLayoutmanager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recylerList.setLayoutManager(verticalLayoutmanager);
@@ -307,7 +305,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
                                 .where(Condition.prop("Grpmemcode").eq(grpMemCode))
                                 .where(Condition.prop("Grpcode").eq(grpCode))
                                 .list();
-                        list.get(0).setMembershipfee(calculatedAmount);
+                        list.get(0).setSharecapital(calculatedAmount);
                         list.get(0).setIsupdated("1");
                         list.get(0).save();
                     }
@@ -317,7 +315,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
             }
             if (count == membershipFeeModelList.size()) {
                 new StyleableToast
-                        .Builder(MemberShipFeeActivity.this)
+                        .Builder(ShareCapitalActivity.this)
                         .text(getString(R.string.at_least_one_amount))
                         .iconStart(R.drawable.wrong_icon_white)
                         .textColor(Color.WHITE)
@@ -327,7 +325,7 @@ public class MemberShipFeeActivity extends AppCompatActivity implements MFAView 
                 presenter.getPgMem(PgActivity.pgCodeSelected);
                 presenter.setRecyclerView();
                 new StyleableToast
-                        .Builder(MemberShipFeeActivity.this)
+                        .Builder(ShareCapitalActivity.this)
                         .text(getString(R.string.saved))
                         .iconStart(R.drawable.right)
                         .textColor(Color.WHITE)

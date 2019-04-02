@@ -22,7 +22,7 @@ public class SeedDataPgActivity {
 
     private static final String[] title1 = new String[] {
             "सदस्यों का विवरण",
-            "Share Capital",
+            "शेयर पूंजी",
             "Livelihood Activities in PG",
             "WUG"
     };

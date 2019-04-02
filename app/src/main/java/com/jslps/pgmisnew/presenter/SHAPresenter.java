@@ -8,46 +8,48 @@ import android.widget.TextView;
 
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.interactor.MFAInteractor;
+import com.jslps.pgmisnew.interactor.SHAInteractor;
 import com.jslps.pgmisnew.view.MFAView;
+import com.jslps.pgmisnew.view.SHAView;
 
 import java.util.List;
 
-public class MFAPresenter implements MFAInteractor.mfaInteractor {
-    private MFAView mfaView;
-    private MFAInteractor mfaInteractor;
+public class SHAPresenter implements SHAInteractor.shaInteractor {
+    private SHAView shaView;
+    private SHAInteractor shaInteractor;
 
-    public MFAPresenter(MFAView mfaView, MFAInteractor mfaInteractor) {
-        this.mfaView = mfaView;
-        this.mfaInteractor = mfaInteractor;
+    public SHAPresenter(SHAView shaView, SHAInteractor shaInteractor) {
+        this.shaView = shaView;
+        this.shaInteractor = shaInteractor;
     }
 
     public void getPgMem(String pgCode){
-        mfaInteractor.getPgMemList(this,pgCode);
+        shaInteractor.getPgMemList(this,pgCode);
     }
 
     public void setZoomIn(){
-        mfaView.setZoomIn();
+        shaView.setZoomIn();
     }
 
     @Override
     public void getPgMemList(List<Pgmemtbl> list) {
-        mfaView.setPgMemList(list);
+        shaView.setPgMemList(list);
     }
 
     public void setPgname(){
-        mfaView.setPgName();
+        shaView.setPgName();
     }
 
     public void setViewAdapter(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox,TextView pos) {
-        mfaView.setViewAdapter(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox,pos);
+        shaView.setViewAdapter(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox,pos);
     }
 
     public void setRecyclerView(){
-        mfaView.setRecyclerView();
+        shaView.setRecyclerView();
     }
 
     public void addTextChangeListner(ConstraintLayout firstLayout, TextView farmer, TextView total, TextView paid, TextView remaining, TextInputEditText enterAmount, View viewLayout, int adapterPosition, CheckBox checkBox,TextView pos){
-        mfaView.addTextChangeListner(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox,pos);
+        shaView.addTextChangeListner(firstLayout,farmer,total,paid,remaining,enterAmount,viewLayout,adapterPosition,checkBox,pos);
     }
 
 }

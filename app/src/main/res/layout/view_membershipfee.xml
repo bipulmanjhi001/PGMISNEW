@@ -30,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view">
 
         <CheckBox
+            android:visibility="gone"
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +80,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="2dp"
-            android:text="-"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/textView58"
             app:layout_constraintTop_toBottomOf="@+id/textView57" />
@@ -123,6 +123,38 @@
                 android:inputType="number" />
 
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/textView62"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="32dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toStartOf="@+id/textView59"
+            app:layout_constraintStart_toEndOf="@+id/checkBox"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+        <TextView
+            android:id="@+id/textView63"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="भुगतान:"
+            app:layout_constraintStart_toEndOf="@+id/textInputLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/textView57" />
+
+        <TextView
+            android:id="@+id/textView64"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="शेष:"
+            app:layout_constraintStart_toStartOf="@+id/textView63"
+            app:layout_constraintTop_toBottomOf="@+id/textView60" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -48,7 +48,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/membership_fee"
+        android:text="@string/share_capital"
         android:textSize="20sp"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
