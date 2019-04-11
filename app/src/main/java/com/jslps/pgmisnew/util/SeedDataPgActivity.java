@@ -29,7 +29,7 @@ public class SeedDataPgActivity {
 
     private static final String[] title2 = new String[] {
             "सदस्यता शुल्क",
-            "Meeting Details of PG",
+            "बैठक का विवरण",
             "Irrigation",
             "",
     };

@@ -76,6 +76,15 @@
     <string name="enter_mebership_fee">सदस्यता शुल्क दर्ज करें</string>
     <string name="cant_be_greater">दर्ज राशि शेष राशि से अधिक नहीं हो सकती</string>
     <string name="at_least_one_amount">कृपया कम से कम एक राशि दर्ज करें</string>
+    <string name="meeting_details">बैठक का विवरण</string>
+    <string name="meeting_date">बैठक की तारीख दर्ज करें</string>
+    <string name="total_no_people">उपस्थित लोगों की कुल संख्या दर्ज करें</string>
+    <string name="meeting_date_list">बैठक की तारीख</string>
+    <string name="no_of_people">उपस्थित लोगों की संख्या</string>
+    <string name="no_of_cadre">उपस्थित कैडर का चयन करें</string>
+    <string name="no_of_cadre_list">उपस्थित कैडर</string>
+    <string name="date_cant_be_empty">दिनांक और सदस्यों की संख्या रिक्त नहीं हो सकती</string>
+    <string name="meeting_saved_successfully">मीटिंग, सफलतापूर्वक सहेजा गया</string>
 
 
     <string-array name="pg_list">

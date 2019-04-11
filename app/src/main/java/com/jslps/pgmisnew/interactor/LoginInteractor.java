@@ -6,8 +6,10 @@ import com.jslps.pgmisnew.database.Blocktbl;
 import com.jslps.pgmisnew.database.Clustertbl;
 import com.jslps.pgmisnew.database.Districttbl;
 import com.jslps.pgmisnew.database.Logintbl;
+import com.jslps.pgmisnew.database.PgMeetingtbl;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
+import com.jslps.pgmisnew.database.Shgmemberslocallyaddedtbl;
 import com.jslps.pgmisnew.database.Shgmemnonpg;
 import com.jslps.pgmisnew.database.Shgtbl;
 import com.jslps.pgmisnew.database.Villagetbl;
@@ -68,6 +70,8 @@ public class LoginInteractor {
                     Villagetbl.deleteAll(Villagetbl.class);
                     Shgmemnonpg.deleteAll(Shgmemnonpg.class);
                     Shgtbl.deleteAll(Shgtbl.class);
+                    PgMeetingtbl.deleteAll(PgMeetingtbl.class);
+                    Shgmemberslocallyaddedtbl.deleteAll(Shgmemberslocallyaddedtbl.class);
 
                     listener.callLoginApi();
                 }

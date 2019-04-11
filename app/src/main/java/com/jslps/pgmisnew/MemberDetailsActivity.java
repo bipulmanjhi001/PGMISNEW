@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +37,8 @@ public class MemberDetailsActivity extends AppCompatActivity implements MDAView 
     FloatingActionButton floatActionBtnAdd;
     @BindView(R.id.textView23)
     TextView tvPgName;
+    @BindView(R.id.textView70)
+    TextView tvItems;
 
     /*Defining objects*/
     MDAPresenter presenter;
@@ -46,6 +47,7 @@ public class MemberDetailsActivity extends AppCompatActivity implements MDAView 
 
     /*Class Globals*/
     List<Pgmemtbl> pgmemtblList;
+
 
 
     private boolean mActive = false;
@@ -68,6 +70,7 @@ public class MemberDetailsActivity extends AppCompatActivity implements MDAView 
         presenter.setZoomIn();
         presenter.setRecyclerView();
         presenter.setPgname();
+        presenter.setPgItemNo();
 
         /*onclick*/
         floatActionBtnAdd.setOnClickListener(new View.OnClickListener() {
@@ -124,16 +127,24 @@ public class MemberDetailsActivity extends AppCompatActivity implements MDAView 
     }
 
     @Override
-    public void setViewAdapter(ConstraintLayout firstLayout,ImageView edit,ImageView delete,ImageView dropDown, TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPostion) {
+    public void setPgItems() {
+        if(pgmemtblList!=null){
+            tvItems.setText("Members: "+pgmemtblList.size());
+        }
+
+    }
+
+    @Override
+    public void setViewAdapter(ConstraintLayout firstLayout, ImageView edit, ImageView delete, ImageView dropDown, TextView farmername, TextView fatherhusbandshg, TextView shg, TextView fathername, TextView husbandname, TextView designation, TextView primaryactivity, TextView fishery, TextView hva, TextView livestock, TextView ntfp, TextView memfee, TextView sharecapital, View viewLayout, ConstraintLayout layout, int adapterPostion) {
         Pgmemtbl item = pgmemtblList.get(adapterPostion);
 
         //visbility of edit and delete icons
-        if(item.getIsexported().equals("1")){
+        if (item.getIsexported().equals("1")) {
             edit.setVisibility(View.GONE);
             delete.setVisibility(View.GONE);
             firstLayout.setBackgroundResource(R.drawable.item_border_view_pg_activity);
 
-        }else{
+        } else {
             edit.setVisibility(View.VISIBLE);
             delete.setVisibility(View.VISIBLE);
             firstLayout.setBackgroundResource(R.drawable.item_border_light_green);

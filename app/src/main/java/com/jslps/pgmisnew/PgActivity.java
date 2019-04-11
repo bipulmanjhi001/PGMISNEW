@@ -164,6 +164,9 @@ public class PgActivity extends AppCompatActivity implements PgActivityView {
                         if(item.getId2()==2){
                             Intent intent = new Intent(PgActivity.this, MemberShipFeeActivity.class);
                             startActivity(intent);
+                        }else if(item.getId2()==4){
+                            Intent intent = new Intent(PgActivity.this, MeetingDetailsOfPg.class);
+                            startActivity(intent);
                         }else {
                             Intent intent = new Intent(PgActivity.this, Test.class);
                             startActivity(intent);
