@@ -21,4 +21,12 @@ public interface PgActivityView {
     void setViewAdapter(TextView text1, TextView text2, ImageView icon1, ImageView icon2, ConstraintLayout layout1, ConstraintLayout layout2, int adapterPostion, View viewLayout);
 
     void setPgSpinner(List<Pgtbl> list);
+
+    void uploadHide();
+
+    void uploadUnhide();
+
+    void pgMemsShgMems();
+
+    void callUploadApi(String sData,String sData1);
 }

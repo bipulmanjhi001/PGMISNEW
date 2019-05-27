@@ -8,9 +8,11 @@ public class AppConstant {
 
     //methods
     public static final String loginMethod="PGMIS_Login_Data";
+    public static final String Upload_tblMstGroupMembers_Johar="Upload_tblMstGroupMembers_Johar";
 
     //table indentifier
     public static final String logintbl ="1";
+    public static final String tblMstGroupMembers_Johar="2";
 
 
 

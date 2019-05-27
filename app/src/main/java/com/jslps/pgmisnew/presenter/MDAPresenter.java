@@ -52,4 +52,8 @@ public class MDAPresenter implements MDAInteractor.mdaInteractor {
     public void setPgItemNo(){
         mdaView.setPgItems();
     }
+
+    public void search(){
+      mdaView.search();
+    }
 }

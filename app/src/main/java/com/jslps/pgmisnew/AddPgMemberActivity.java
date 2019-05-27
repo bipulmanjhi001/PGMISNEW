@@ -382,7 +382,8 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
                             livestock,
                             grpName,
                             "0",
-                            "0");
+                            "0",
+                            "");
 
                     data.save();
 
@@ -549,15 +550,19 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
         TextView tvFatherName = dialog.findViewById(R.id.et_father_name);
         TextView tvMemberShipFee = dialog.findViewById(R.id.et_membershipfee);
         TextView tvShareCapital = dialog.findViewById(R.id.et_sharecapital);
-
+        String shgCodelocal="";
+        String shgNameS="";
 
         //logics
         if(userResponse.equals(getString(R.string.yes))){
             shgName.setText(shgNameSelected);
             shgName.setVisibility(View.VISIBLE);
+            shgCodelocal = shgCodeSelected;
+            shgNameS = shgNameSelected;
         }else{
             shgName.setText("");
             shgName.setVisibility(View.GONE);
+            shgCodelocal = "99999";
         }
 
         List<Pgtbl> list = Select.from(Pgtbl.class)
@@ -719,6 +724,8 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
         });
 
 
+        String finalShgCodelocal = shgCodelocal;
+        String finalShgNameS = shgNameS;
         save.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -757,7 +764,7 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
                     Pgmemtbl data = new Pgmemtbl(
                             PgActivity.pgCodeSelected,
                             uuid,
-                            shgCodeSelected,
+                            finalShgCodelocal,
                             tvMemberName.getText().toString(),
                             tvMemberShipFee.getText().toString(),
                             tvShareCapital.getText().toString(),
@@ -770,15 +777,16 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
                             hva,
                             ntfp,
                             livestock,
-                            shgNameSelected,
+                            finalShgNameS,
                             "0",
-                            "0");
+                            "0",
+                            uuid);
 
                     data.save();
 
                     Shgmemberslocallyaddedtbl data1 = new Shgmemberslocallyaddedtbl(PgActivity.pgCodeSelected,
                             uuid,
-                            shgCodeSelected,
+                            finalShgCodelocal,
                             tvMemberName.getText().toString(),
                             tvFatherName.getText().toString(),
                             tvHusbandName.getText().toString(),
@@ -847,5 +855,7 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
         dialog.getWindow().setLayout(width, height);
 
         dialog.show();
+
+
     }
 }

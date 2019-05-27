@@ -15,7 +15,9 @@ import com.jslps.pgmisnew.presenter.MDAPresenter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -25,6 +27,7 @@ import java.util.List;
 public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDetailsActivityAdapter.MyViewHolder> {
 
     private List<Pgmemtbl> list;
+    private List<Pgmemtbl> newItemList;
     private MDAPresenter presenter;
 
 
@@ -61,6 +64,8 @@ public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDet
     public MemberDetailsActivityAdapter(MDAPresenter presenter, List<Pgmemtbl> itemList) {
         this.presenter = presenter;
         this.list = itemList;
+        this.newItemList = new ArrayList<>();
+        this.newItemList.addAll(list);
 
     }
 
@@ -102,5 +107,23 @@ public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDet
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    // Filter Class
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        list.clear();
+        if (charText.length() == 0) {
+            list.addAll(newItemList);
+        } else {
+            for (Pgmemtbl dd : newItemList) {
+                if (dd.getMembername().toLowerCase(Locale.getDefault())
+                        .contains(charText)||dd.getGrpname().toLowerCase(Locale.getDefault())
+                        .contains(charText)) {
+                    list.add(dd);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

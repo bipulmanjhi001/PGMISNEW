@@ -85,6 +85,7 @@
     <string name="no_of_cadre_list">उपस्थित कैडर</string>
     <string name="date_cant_be_empty">दिनांक और सदस्यों की संख्या रिक्त नहीं हो सकती</string>
     <string name="meeting_saved_successfully">मीटिंग, सफलतापूर्वक सहेजा गया</string>
+    <string name="delete_sure">क्या आप पक्का इसे हटाना चाहते हैं</string>
 
 
     <string-array name="pg_list">

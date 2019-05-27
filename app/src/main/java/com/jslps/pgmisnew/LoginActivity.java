@@ -144,11 +144,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
 
     @Override
     public void setUsernameError() {
+        presenter.revertProgress();
         new AlertView(this, getString(R.string.no_user_name), getString(R.string.username_blank), getString(R.string.try_again));
     }
 
     @Override
     public void setPasswordError() {
+        presenter.revertProgress();
         new AlertView(this, getString(R.string.no_password), getString(R.string.password_blank), getString(R.string.try_again));
     }
 
@@ -332,5 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
         }));
         alert.show(LoginActivity.this);
     }
+
+
 
 }
