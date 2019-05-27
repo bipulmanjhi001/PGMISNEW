@@ -21,11 +21,12 @@ public class Pgmemtbl extends SugarRecord {
     private String Grpname;
     private String Isexported;
     private String Isupdated;
+    private String Uid;
 
     public Pgmemtbl() {
     }
 
-    public Pgmemtbl(String pgcode, String grpmemcode, String grpcode, String membername, String membershipfee, String sharecapital, String fathername, String husbandname, String designation, String fatherhusbandnameshg, String primaryactivity, String fishery, String hva, String ntfp, String livestock,String grpname,String isexported,String isupdated) {
+    public Pgmemtbl(String pgcode, String grpmemcode, String grpcode, String membername, String membershipfee, String sharecapital, String fathername, String husbandname, String designation, String fatherhusbandnameshg, String primaryactivity, String fishery, String hva, String ntfp, String livestock,String grpname,String isexported,String isupdated,String uid) {
         Pgcode = pgcode;
         Grpmemcode = grpmemcode;
         Grpcode = grpcode;
@@ -44,6 +45,15 @@ public class Pgmemtbl extends SugarRecord {
         Grpname = grpname;
         Isexported = isexported;
         Isupdated = isupdated;
+        Uid = uid;
+    }
+
+    public String getUid() {
+        return Uid;
+    }
+
+    public void setUid(String uid) {
+        Uid = uid;
     }
 
     public String getIsupdated() {

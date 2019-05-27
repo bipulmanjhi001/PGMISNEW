@@ -48,4 +48,12 @@ public class MDAPresenter implements MDAInteractor.mdaInteractor {
     public void setPgname(){
         mdaView.setPgName();
     }
+
+    public void setPgItemNo(){
+        mdaView.setPgItems();
+    }
+
+    public void search(){
+      mdaView.search();
+    }
 }

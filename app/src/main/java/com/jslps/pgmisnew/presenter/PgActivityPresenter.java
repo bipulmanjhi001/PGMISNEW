@@ -51,4 +51,21 @@ public class PgActivityPresenter implements PgActivityInteractor.pgActivityInter
     public void setViewAdapter(TextView text1, TextView text2, ImageView icon1, ImageView icon2, ConstraintLayout layout1, ConstraintLayout layout2, int adapterPostion, View viewLayout){
         pgActivityView.setViewAdapter(text1,text2,icon1,icon2,layout1,layout2,adapterPostion,viewLayout);
     }
+
+    public void uploadButtonHide(){
+        pgActivityView.uploadHide();
+    }
+
+    public void uploadButtonUnhide(){
+        pgActivityView.uploadUnhide();
+    }
+
+    public void getPgMemberstblandShgMemrtbl(){
+        pgActivityView.pgMemsShgMems();
+    }
+
+    public void callUploadApi(String sData, String sData1){
+        pgActivityView.callUploadApi(sData,sData1);
+    }
+
 }

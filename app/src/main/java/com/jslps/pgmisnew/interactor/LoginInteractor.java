@@ -6,8 +6,10 @@ import com.jslps.pgmisnew.database.Blocktbl;
 import com.jslps.pgmisnew.database.Clustertbl;
 import com.jslps.pgmisnew.database.Districttbl;
 import com.jslps.pgmisnew.database.Logintbl;
+import com.jslps.pgmisnew.database.PgMeetingtbl;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
+import com.jslps.pgmisnew.database.Shgmemberslocallyaddedtbl;
 import com.jslps.pgmisnew.database.Shgmemnonpg;
 import com.jslps.pgmisnew.database.Shgtbl;
 import com.jslps.pgmisnew.database.Villagetbl;
@@ -58,16 +60,7 @@ public class LoginInteractor {
                 if(logintblList.size()>0){
                     listener.onSuccess();
                 }else{
-                    //deleting the the database of old user if prersent
-                    Logintbl.deleteAll(Logintbl.class);
-                    Blocktbl.deleteAll(Blocktbl.class);
-                    Clustertbl.deleteAll(Clustertbl.class);
-                    Districttbl.deleteAll(Districttbl.class);
-                    Pgmemtbl.deleteAll(Pgmemtbl.class);
-                    Pgtbl.deleteAll(Pgtbl.class);
-                    Villagetbl.deleteAll(Villagetbl.class);
-                    Shgmemnonpg.deleteAll(Shgmemnonpg.class);
-                    Shgtbl.deleteAll(Shgtbl.class);
+
 
                     listener.callLoginApi();
                 }
@@ -86,6 +79,20 @@ public class LoginInteractor {
 
             //district
             JSONArray mainArray = new JSONArray(data);
+
+            //deleting the the database of old user if prersent
+            Logintbl.deleteAll(Logintbl.class);
+            Blocktbl.deleteAll(Blocktbl.class);
+            Clustertbl.deleteAll(Clustertbl.class);
+            Districttbl.deleteAll(Districttbl.class);
+            Pgmemtbl.deleteAll(Pgmemtbl.class);
+            Pgtbl.deleteAll(Pgtbl.class);
+            Villagetbl.deleteAll(Villagetbl.class);
+            Shgmemnonpg.deleteAll(Shgmemnonpg.class);
+            Shgtbl.deleteAll(Shgtbl.class);
+            PgMeetingtbl.deleteAll(PgMeetingtbl.class);
+            Shgmemberslocallyaddedtbl.deleteAll(Shgmemberslocallyaddedtbl.class);
+
             for(int i=0;i<mainArray.length();i++){
                 JSONObject districtObject = mainArray.getJSONObject(i);
                 String districtCode = districtObject.optString("DistrictCode");
@@ -200,7 +207,7 @@ public class LoginInteractor {
                                     }
 
                                     //saving to PgMemtbl
-                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName,Isexported,Isupdated);
+                                    Pgmemtbl dataPM = new Pgmemtbl(pgCode,Group_M_Code,GroupCode,MemberName,MembershipFee,ShareCapital,FatherName,HusbandName,Designation,FatherHusbandNameinSHG,primaryActivityM,fisheryM,hvaM,ntfpM,livestockM,groupName,Isexported,Isupdated,"");
                                     dataPM.save();
                                 }
                             }

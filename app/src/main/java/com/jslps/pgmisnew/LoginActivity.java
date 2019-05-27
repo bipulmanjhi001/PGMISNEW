@@ -144,11 +144,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
 
     @Override
     public void setUsernameError() {
+        presenter.revertProgress();
         new AlertView(this, getString(R.string.no_user_name), getString(R.string.username_blank), getString(R.string.try_again));
     }
 
     @Override
     public void setPasswordError() {
+        presenter.revertProgress();
         new AlertView(this, getString(R.string.no_password), getString(R.string.password_blank), getString(R.string.try_again));
     }
 
@@ -165,6 +167,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
 
     @Override
     public void navigateToHome() {
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.right);
+        btnlogin.doneLoadingAnimation(R.color.colorWhite,largeIcon);
         Intent intent = new Intent(this, PgActivity.class);
         startActivity(intent);
         finish();
@@ -178,8 +182,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
             StringRequest mStringRequest;
             mRequestQueue = Volley.newRequestQueue(this);
             mStringRequest = new VolleyString(new GetUrlLogin(AppConstant.domain,AppConstant.loginMethod,etUsername.getText().toString(),etPassword.getText().toString()).getUrl(),AppConstant.logintbl,this).getString();
-            //showing progress here
-            presenter.showProgress();
+
             mRequestQueue.add(mStringRequest);
         }else{
             new StyleableToast
@@ -274,6 +277,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
     }
 
     private void validateCredentials() {
+        //showing progress here
+        presenter.showProgress();
         presenter.validateCredentials(etUsername.getText().toString(), etPassword.getText().toString(), cbRememberMe.isChecked());
     }
 
@@ -290,8 +295,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
                         .backgroundColor(getResources().getColor(R.color.colorPrimary))
                         .show();
             }else{
-                Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.right);
-                btnlogin.doneLoadingAnimation(R.color.colorWhite,largeIcon);
+
+
                 presenter.consumeData(result,etUsername.getText().toString(),etPassword.getText().toString());
             }
         }
@@ -329,5 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
         }));
         alert.show(LoginActivity.this);
     }
+
+
 
 }
