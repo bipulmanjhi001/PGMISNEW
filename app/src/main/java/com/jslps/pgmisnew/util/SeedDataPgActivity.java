@@ -23,21 +23,21 @@ public class SeedDataPgActivity {
     private static final String[] title1 = new String[] {
             "सदस्यों का विवरण",
             "शेयर पूंजी",
-            "Livelihood Activities in PG",
+            "PG PAYMENT",
             "WUG"
     };
 
     private static final String[] title2 = new String[] {
             "सदस्यता शुल्क",
             "बैठक का विवरण",
-            "Irrigation",
+            "PG RECEIPT",
             "",
     };
 
     private static final int[] imageIcon1= new int[] {
             R.drawable.member_detail_icon,
             R.drawable.share_capital_icon,
-            R.drawable.livelihood_activities_icon,
+            R.drawable.ic_pay,
             R.drawable.member_detail_icon
 
     };
@@ -45,7 +45,7 @@ public class SeedDataPgActivity {
     private static final int[] imageIcon2= new int[] {
             R.drawable.member_fee_icon,
             R.drawable.meeting_details_icon,
-            R.drawable.irrigation_icon,
+            R.drawable.ic_give_money,
             R.drawable.member_detail_icon
 
     };

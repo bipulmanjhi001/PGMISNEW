@@ -19,7 +19,8 @@ public class LoginPresenter implements LoginInteractor.OnLoginFinishedListener {
     public void validateCredentials(String username, String password,boolean isCheck) {
 
         loginInteractor.login(username, password,isCheck, this);
-        loginInteractor.versionCheck(this);
+        //temporarily this is commented
+       // loginInteractor.versionCheck(this);
     }
 
 
@@ -35,8 +36,8 @@ public class LoginPresenter implements LoginInteractor.OnLoginFinishedListener {
     }
 
     @Override
-    public void onSuccess() {
-        loginView.navigateToHome();
+    public void onSuccess(String when) {
+        loginView.navigateToHome(when);
     }
 
     @Override
@@ -55,8 +56,8 @@ public class LoginPresenter implements LoginInteractor.OnLoginFinishedListener {
     }
 
     @Override
-    public void moveToNextActivity() {
-        loginView.navigateToHome();
+    public void moveToNextActivity(String when) {
+        loginView.navigateToHome(when);
     }
 
     public void showProgress(){

@@ -130,8 +130,12 @@ public class AddPgMemberActivity extends AppCompatActivity implements APMView {
             for (int i = 0; i < shgModelList.size(); i++) {
                 String shgCode = shgModelList.get(i).getShgcode();
                 String shgName = shgModelList.get(i).getShgname();
-                shgCodeList.add(shgCode);
-                shgNameList.add(shgName);
+
+                if(shgCode!=null && shgName!=null){
+                    shgCodeList.add(shgCode);
+                    shgNameList.add(shgName);
+                }
+
             }
 
 

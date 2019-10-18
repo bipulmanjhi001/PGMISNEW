@@ -2,6 +2,7 @@ package com.jslps.pgmisnew.util;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 
@@ -45,6 +46,12 @@ public class VolleyString {
                 return null;
             }
         };
+        mStringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         return mStringRequest;
+
+
     }
 }

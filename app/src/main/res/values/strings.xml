@@ -86,6 +86,8 @@
     <string name="date_cant_be_empty">दिनांक और सदस्यों की संख्या रिक्त नहीं हो सकती</string>
     <string name="meeting_saved_successfully">मीटिंग, सफलतापूर्वक सहेजा गया</string>
     <string name="delete_sure">क्या आप पक्का इसे हटाना चाहते हैं</string>
+    <string name="select_headd">Please Select Head</string>
+    <string name="blank_date">Date Can\'t be Blank</string>
 
 
     <string-array name="pg_list">
@@ -104,6 +106,10 @@
 
     <string-array name="select_designation">
         <item>Select Designation</item>
+    </string-array>
+
+    <string-array name="select_head">
+        <item>Select Head Name</item>
     </string-array>
 
     <string-array name="select_gender">

@@ -8,22 +8,33 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.irozon.alertview.AlertActionStyle;
+import com.irozon.alertview.AlertStyle;
+import com.irozon.alertview.objects.AlertAction;
 import com.jslps.pgmisnew.adapter.MeetingAdapter;
 import com.jslps.pgmisnew.database.PgMeetingtbl;
 import com.jslps.pgmisnew.interactor.MeetingInteractor;
 import com.jslps.pgmisnew.presenter.MeetingPresenter;
 import com.jslps.pgmisnew.view.MeetingView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -118,9 +129,22 @@ public class MeetingDetailsOfPg extends AppCompatActivity implements MeetingView
     public void setAdapter(ImageView edit, ImageView delete, TextView date, TextView no, TextView cadre, ConstraintLayout layout1, ConstraintLayout layout2,int position) {
         PgMeetingtbl item = pgMeetingtblList.get(position);
 
+        //currently not using edit button
+        edit.setVisibility(View.GONE);
+
         date.setText(item.getMeetingdate());
         no.setText(item.getNoofpeople());
         cadre.setText(item.getCadres());
+
+
+        //delete
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert(MeetingDetailsOfPg.this.getString(R.string.delete_sure),"",item.getId());
+
+            }
+        });
     }
 
     @Override
@@ -154,6 +178,9 @@ public class MeetingDetailsOfPg extends AppCompatActivity implements MeetingView
             builder.append("MBK");
             builder.append(",");
         }
+
+        builder.setLength(builder.length() - 1);
+
         PgMeetingtbl data = new PgMeetingtbl(meetingId, tvDate.getText().toString(), etNoOfMem.getText().toString(), builder.toString(), PgActivity.pgCodeSelected,"0");
         data.save();
 
@@ -206,11 +233,54 @@ public class MeetingDetailsOfPg extends AppCompatActivity implements MeetingView
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-        tvDate.setText(date);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
+        String currentDate = new SimpleDateFormat("d/M/yyyy", Locale.getDefault()).format(new Date());
+
+        Date date1 = null,date2=null;
+        try {
+             date1 = sdf.parse(date);
+             date2 = sdf.parse(currentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (date1 != null && date1.compareTo(date2) > 0) {
+            Toast.makeText(MeetingDetailsOfPg.this,"Please Select Valid Date",Toast.LENGTH_LONG).show();
+        }else{
+            tvDate.setText(date);
+        }
+
+
     }
 
     @OnClick(R.id.button4)
     public void onViewClickedsave() {
         presenter.validation(tvDate.getText().toString(), etNoOfMem.getText().toString(), chAKM.isChecked(), chAPS.isChecked(), chAMM.isChecked(), chMBK.isChecked());
+    }
+
+
+    private void alert(String heading,String message,long id){
+        com.irozon.alertview.AlertView alert = new com.irozon.alertview.AlertView(heading, message, AlertStyle.DIALOG);
+        alert.addAction(new AlertAction(getString(R.string.yes), AlertActionStyle.DEFAULT, action -> {
+            //delete logic here
+
+
+            PgMeetingtbl data = PgMeetingtbl.findById(PgMeetingtbl.class, id);
+            data.delete();
+            new StyleableToast
+                    .Builder(MeetingDetailsOfPg.this)
+                    .text("Successfully deleted")
+                    .iconStart(R.drawable.right)
+                    .textColor(Color.WHITE)
+                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                    .show();
+            //refreshing
+            presenter.callRecyclerView();
+        }));
+        alert.addAction(new AlertAction(getString(R.string.no), AlertActionStyle.DEFAULT, action -> {
+
+        }));
+        alert.show(MeetingDetailsOfPg.this);
     }
 }

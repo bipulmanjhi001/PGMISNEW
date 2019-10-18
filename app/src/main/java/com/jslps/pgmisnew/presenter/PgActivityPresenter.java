@@ -68,4 +68,12 @@ public class PgActivityPresenter implements PgActivityInteractor.pgActivityInter
         pgActivityView.callUploadApi(sData,sData1);
     }
 
+    public void callUploadApiMeeting(String sData){
+        pgActivityView.callUploadApiMeeting(sData);
+    }
+
+    public void callDownloadWebServicesMeetingtbl(){
+        pgActivityView.callDownloadWebServicesMeetingtbl();
+    }
+
 }

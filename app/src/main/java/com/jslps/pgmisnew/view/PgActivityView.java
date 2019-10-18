@@ -29,4 +29,8 @@ public interface PgActivityView {
     void pgMemsShgMems();
 
     void callUploadApi(String sData,String sData1);
+
+    void callUploadApiMeeting(String sData);
+
+    void callDownloadWebServicesMeetingtbl();
 }

@@ -39,6 +39,7 @@ import com.jslps.pgmisnew.util.VersionChecker;
 import com.jslps.pgmisnew.util.VolleyString;
 import com.jslps.pgmisnew.view.LoginView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.zxy.recovery.core.Recovery;
 
 import java.util.concurrent.ExecutionException;
 
@@ -87,6 +88,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
         /*initialiazation*/
         presenter = new LoginPresenter(this, new LoginInteractor());
         mdmSharedPreference = MDMSharedPreference.getInstance(this);
+        
+        //if application get crashed this is called
+        crash();
 
 
         //methods
@@ -99,6 +103,17 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
         presenter.sharedUser();
         presenter.passwordIcon();
         presenter.setFont();
+    }
+
+    private void crash() {
+        Recovery.getInstance()
+                .debug(true)
+                .recoverInBackground(false)
+                .recoverStack(true)
+                .mainPage(LoginActivity.class)
+                .recoverEnabled(true)
+                .silent(false, Recovery.SilentMode.RECOVER_ACTIVITY_STACK)
+                .init(this);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -166,10 +181,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
     }
 
     @Override
-    public void navigateToHome() {
+    public void navigateToHome(String when) {
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.right);
         btnlogin.doneLoadingAnimation(R.color.colorWhite,largeIcon);
         Intent intent = new Intent(this, PgActivity.class);
+        intent.putExtra("when",when);
         startActivity(intent);
         finish();
     }

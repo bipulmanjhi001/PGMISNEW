@@ -11,7 +11,7 @@ public interface LoginView {
 
     void setStorePassword(boolean value);
 
-    void navigateToHome();
+    void navigateToHome(String when);
 
     void setCallLoginApi();
 

@@ -20,9 +20,12 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 import com.jslps.pgmisnew.adapter.PgActivityAdapter;
 import com.jslps.pgmisnew.database.PgActivityModel;
+import com.jslps.pgmisnew.database.PgMeetingtbl;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
 import com.jslps.pgmisnew.database.Shgmemberslocallyaddedtbl;
@@ -30,6 +33,8 @@ import com.jslps.pgmisnew.interactor.PgActivityInteractor;
 import com.jslps.pgmisnew.presenter.PgActivityPresenter;
 import com.jslps.pgmisnew.util.AppConstant;
 import com.jslps.pgmisnew.util.CheckConnectivity;
+import com.jslps.pgmisnew.util.GetUrlDownloadMeeting;
+import com.jslps.pgmisnew.util.GetUrlUploadMeeting;
 import com.jslps.pgmisnew.util.GetUrlUploadSHGANDPG;
 import com.jslps.pgmisnew.util.ManualJsonConvert;
 import com.jslps.pgmisnew.util.VolleyString;
@@ -43,6 +48,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +78,9 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     public static String pgNameSelected = "";
     public static List<Pgmemtbl> pgmemtblList;
     public static List<Shgmemberslocallyaddedtbl> shgmemberslocallyaddedtblList;
+    public static List<PgMeetingtbl> pgMeetingtblList;
     ProgressDialog progress;
+    String when;
 
 
     @Override
@@ -96,6 +104,16 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         presenter.getSpinnerList();
         presenter.getPgMemberstblandShgMemrtbl();
 
+        //getting valued passed from Login Activity
+        Intent intent = getIntent();
+
+        when = intent.getStringExtra("when");
+
+        if(when.equals("first")){
+            //calling download websevices here
+            DialogShowDownload();
+            presenter.callDownloadWebServicesMeetingtbl();
+        }
     }
 
 
@@ -123,7 +141,9 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     @Override
     public void setViewAdapter(TextView text1, TextView text2, ImageView icon1, ImageView icon2, ConstraintLayout layout1, ConstraintLayout layout2, int adapterPostion, View viewLayout) {
         PgActivityModel item = listPgActivity.get(adapterPostion);
-        if (item.getId1() == 1) {
+
+        //this should be 1 instead of 6
+        if (item.getId1() == 6) {
             viewLayout.setVisibility(View.VISIBLE);
         } else {
             viewLayout.setVisibility(View.GONE);
@@ -133,9 +153,18 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         text2.setText(item.getName2());
         icon1.setImageResource(item.getImageIcon1());
         icon2.setImageResource(item.getImageIcon2());
-        if (item.getId2() == 8) {
+
+
+        //for temporary basis and should be removed
+        if(item.getId1()==1||item.getId2()==2||item.getId1()==3||item.getId2()==4||item.getId1()==7||item.getId2()==8){
+            layout1.setVisibility(View.GONE);
             layout2.setVisibility(View.GONE);
+        }else{
+            layout1.setVisibility(View.VISIBLE);
+            layout2.setVisibility(View.VISIBLE);
         }
+
+
 
 
         layout1.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +185,9 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                             startActivity(intent);
                         } else if (item.getId1() == 3) {
                             Intent intent = new Intent(PgActivity.this, ShareCapitalActivity.class);
+                            startActivity(intent);
+                        } else if(item.getId1() == 5){
+                            Intent intent = new Intent(PgActivity.this, PgpaymentActivity.class);
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(PgActivity.this, Test.class);
@@ -191,7 +223,10 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                         } else if (item.getId2() == 4) {
                             Intent intent = new Intent(PgActivity.this, MeetingDetailsOfPg.class);
                             startActivity(intent);
-                        } else {
+                        }else if (item.getId2() == 6) {
+                            Intent intent = new Intent(PgActivity.this, PgReceiptActivity.class);
+                            startActivity(intent);
+                        }  else {
                             Intent intent = new Intent(PgActivity.this, Test.class);
                             startActivity(intent);
                         }
@@ -267,7 +302,11 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                 .where(Condition.prop("Isexported").eq(0))
                 .list();
 
-        if(pgmemtblList.size()>0||shgmemberslocallyaddedtblList.size()>0){
+        pgMeetingtblList = Select.from(PgMeetingtbl.class)
+                .where(Condition.prop("Isxported").eq(0))
+                .list();
+
+        if(pgmemtblList.size()>0||shgmemberslocallyaddedtblList.size()>0||pgMeetingtblList.size()>0){
           presenter.uploadButtonUnhide();
         }else{
           presenter.uploadButtonHide();
@@ -294,6 +333,61 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         }
     }
 
+    @Override
+    public void callUploadApiMeeting(String sData) {
+        CheckConnectivity checkConnectivity = new CheckConnectivity();
+        if(checkConnectivity.CheckConnection(this)){
+            RequestQueue mRequestQueue;
+            StringRequest mStringRequest;
+            mRequestQueue = Volley.newRequestQueue(this);
+            mStringRequest = new VolleyString(new GetUrlUploadMeeting(AppConstant.domain,AppConstant.Upload_PgMeetingtbl,sData).getUrl(),AppConstant.PgMeetingtbl,this).getString();
+            mRequestQueue.add(mStringRequest);
+        }else{
+            new StyleableToast
+                    .Builder(this)
+                    .text(getString(R.string.internet_error))
+                    .iconStart(R.drawable.wrong_icon_white)
+                    .textColor(Color.WHITE)
+                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                    .show();
+        }
+
+    }
+
+    @Override
+    public void callDownloadWebServicesMeetingtbl() {
+        //herez
+        CheckConnectivity checkConnectivity = new CheckConnectivity();
+        if(checkConnectivity.CheckConnection(this)){
+            List<Pgtbl> pgtblList = Pgtbl.listAll(Pgtbl.class);
+            List<String> pgCodeList = new ArrayList<>();
+
+            if(pgtblList.size()>0){
+                for(int i=0;i<pgtblList.size();i++){
+                    pgCodeList.add(pgtblList.get(i).getPgcode());
+                }
+            }
+
+            String pgCSV =pgCodeList.toString().replace("[", "").replace("]", "")
+                    .replace(", ", ","); ;
+            RequestQueue mRequestQueue;
+            StringRequest mStringRequest;
+            mRequestQueue = Volley.newRequestQueue(this);
+
+            mStringRequest = new VolleyString(new GetUrlDownloadMeeting(AppConstant.domain,AppConstant.Download_Johar_TabletData_Service,pgCSV,"","",AppConstant.meetingtblflag).getUrl(),AppConstant.PgMeetingtblDownload,this).getString();
+            mRequestQueue.add(mStringRequest);
+
+        }else{
+            new StyleableToast
+                    .Builder(this)
+                    .text(getString(R.string.internet_error))
+                    .iconStart(R.drawable.wrong_icon_white)
+                    .textColor(Color.WHITE)
+                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                    .show();
+        }
+    }
+
     @OnClick(R.id.imageView2)
     public void onViewClicked() {
     }
@@ -301,20 +395,29 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     @OnClick(R.id.upload)
     public void onViewClicked1() {
 
-        String json1="",json2="";
+        String json1="",json2="",json3="";
 
         if(pgmemtblList.size()>0){
-            String jsonString = new ManualJsonConvert("tblProducerGroupMembers").ConvertJson();
-            json1 = jsonString;
+            json1 = new ManualJsonConvert("tblProducerGroupMembers").ConvertJson();
         }
 
         if(shgmemberslocallyaddedtblList.size()>0){
-            String jsonString = new ManualJsonConvert("tblMstGroupMembers_Johar").ConvertJson();
-            json2 = jsonString;
+            json2 = new ManualJsonConvert("tblMstGroupMembers_Johar").ConvertJson();
+        }
+
+        if(pgMeetingtblList.size()>0){
+            json3 = new ManualJsonConvert("PgMeetingtbl").ConvertJson();
         }
 
         DialogShow();
-        presenter.callUploadApi(json2,json1);
+        if(pgmemtblList.size()>0||shgmemberslocallyaddedtblList.size()>0){
+            presenter.callUploadApi(json2,json1);
+        }
+
+        if(pgMeetingtblList.size()>0){
+            presenter.callUploadApiMeeting(json3);
+        }
+
     }
 
     @Override
@@ -330,11 +433,12 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
             if(result.equals("[]")){
                 new StyleableToast
                         .Builder(this)
-                        .text("Upload Failed Due to no Response from server")
+                        .text("Upload Failed Due to no Response from server for producer group table")
                         .iconStart(R.drawable.wrong_icon_white)
                         .textColor(Color.WHITE)
                         .backgroundColor(getResources().getColor(R.color.colorPrimary))
                         .show();
+                DialogClose();
             }else{
 
                 try {
@@ -385,6 +489,103 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    DialogClose();
+                }
+            }
+        }
+
+
+        if(tableIndentifier.equals(AppConstant.PgMeetingtbl)){
+            if(result.equals("[]")){
+                new StyleableToast
+                        .Builder(this)
+                        .text("Upload Failed Due to no Response from server for meeting table")
+                        .iconStart(R.drawable.wrong_icon_white)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+                DialogClose();
+            }else{
+
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("Table");
+                    JSONObject object = jsonArray.getJSONObject(0);
+                    String value = object.optString("RetValue");
+                    if(value.equals("1")){
+                        if(pgMeetingtblList.size()>0){
+                            for(int i=0;i<pgMeetingtblList.size();i++){
+                                pgMeetingtblList.get(i).setIsxported("1");
+                                pgMeetingtblList.get(i).save();
+                            }
+                        }
+
+
+                        DialogClose();
+
+                        new StyleableToast
+                                .Builder(this)
+                                .text("Successfully Uploaded")
+                                .iconStart(R.drawable.right)
+                                .textColor(Color.WHITE)
+                                .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                                .show();
+
+
+                        //
+                        presenter.getPgMemberstblandShgMemrtbl();
+
+
+                    }else{
+                        DialogClose();
+                        new StyleableToast
+                                .Builder(this)
+                                .text("Upload Failed Response is Other than 1")
+                                .iconStart(R.drawable.wrong_icon_white)
+                                .textColor(Color.WHITE)
+                                .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                                .show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    DialogClose();
+                }
+            }
+        }
+
+        if(tableIndentifier.equals(AppConstant.PgMeetingtblDownload)){
+            if(result.equals("[]")){
+                new StyleableToast
+                        .Builder(this)
+                        .text("No data found for meeting table download")
+                        .iconStart(R.drawable.wrong_icon_white)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+                DialogClose();
+            }else{
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("Master");
+
+
+                    Type listType = new TypeToken<ArrayList<PgMeetingtbl>>(){}.getType();
+                    List<PgMeetingtbl> list =
+                            new GsonBuilder().create().fromJson(jsonArray.toString(), listType);
+
+
+                    for(int i=0;i<list.size();i++){
+                       PgMeetingtbl data = new PgMeetingtbl(list.get(i).getMeetingid(),list.get(i).getMeetingdate(),list.get(i).getNoofpeople(),list.get(i).getCadres(),list.get(i).getPgcode(),"1");
+                       data.save();
+                    }
+                    DialogClose();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    DialogClose();
                 }
             }
         }
@@ -395,7 +596,7 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         DialogClose();
         new StyleableToast
                 .Builder(this)
-                .text("UploaFd ailed Due to server error")
+                .text("server error,Please check internet Connection")
                 .iconStart(R.drawable.wrong_icon_white)
                 .textColor(Color.WHITE)
                 .backgroundColor(getResources().getColor(R.color.colorPrimary))
@@ -406,6 +607,14 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         progress= new ProgressDialog(this);
         progress = new ProgressDialog(this);
         progress.setMessage("अपलोड जारी है, कृपया प्रतीक्षा करें");
+        progress.setCancelable(false);
+        progress.show();
+    }
+
+    private void DialogShowDownload() {
+        progress= new ProgressDialog(this);
+        progress = new ProgressDialog(this);
+        progress.setMessage("कृपया प्रतीक्षा करें");
         progress.setCancelable(false);
         progress.show();
     }

@@ -7,6 +7,7 @@ import com.jslps.pgmisnew.database.Clustertbl;
 import com.jslps.pgmisnew.database.Districttbl;
 import com.jslps.pgmisnew.database.Logintbl;
 import com.jslps.pgmisnew.database.PgMeetingtbl;
+import com.jslps.pgmisnew.database.PgPaymentTranstbl;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
 import com.jslps.pgmisnew.database.Shgmemberslocallyaddedtbl;
@@ -31,7 +32,7 @@ public class LoginInteractor {
 
         void onPasswordError();
 
-        void onSuccess();
+        void onSuccess(String when);
 
         void storePassword(boolean yes);
 
@@ -39,7 +40,7 @@ public class LoginInteractor {
 
         void callVersionCheckApi();
 
-        void moveToNextActivity();
+        void moveToNextActivity(String when);
 
     }
 
@@ -58,7 +59,7 @@ public class LoginInteractor {
                         .where(Condition.prop("Password").eq(passwordEncrypted))
                         .list();
                 if(logintblList.size()>0){
-                    listener.onSuccess();
+                    listener.onSuccess("second");
                 }else{
 
 
@@ -92,6 +93,7 @@ public class LoginInteractor {
             Shgtbl.deleteAll(Shgtbl.class);
             PgMeetingtbl.deleteAll(PgMeetingtbl.class);
             Shgmemberslocallyaddedtbl.deleteAll(Shgmemberslocallyaddedtbl.class);
+            PgPaymentTranstbl.deleteAll(PgPaymentTranstbl.class);
 
             for(int i=0;i<mainArray.length();i++){
                 JSONObject districtObject = mainArray.getJSONObject(i);
@@ -246,7 +248,7 @@ public class LoginInteractor {
             }
 
             //new activity here
-            listener.moveToNextActivity();
+            listener.moveToNextActivity("first");
 
         }catch (Exception e){
 

@@ -39,8 +39,7 @@ public class MeetingInteractor {
         List<PgMeetingtbl> list = Select.from(PgMeetingtbl.class)
                 .where(Condition.prop("Pgcode").eq(pgcode))
                 .list();
-        if(list.size()>0){
             listner.getMeetingData(list);
-        }
+
     }
 }

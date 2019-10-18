@@ -28,13 +28,16 @@ public class ManualJsonConvert {
             lStringBuilder.append("\"tblProducerGroupMembers\"");
             lStringBuilder.append(":");
             lStringBuilder.append("[");
+
+            String userId="";
+            List<Logintbl> logintblList = Logintbl.listAll(Logintbl.class);
+            if(logintblList.size()>0){
+                userId = logintblList.get(0).getUserid();
+            }
+
             for (int i = 0; i< PgActivity.pgmemtblList.size(); i++){
                 String districtCode="",blockcode="",clusterCode="",villageCode="";
-                String userId="";
-                List<Logintbl> logintblList = Logintbl.listAll(Logintbl.class);
-                if(logintblList.size()>0){
-                    userId = logintblList.get(0).getUserid();
-                }
+
 
                 List<Pgtbl> pgtblList = Select.from(Pgtbl.class)
                         .where(Condition.prop("Pgcode").eq(PgActivity.pgmemtblList.get(i).getPgcode()))
@@ -98,6 +101,15 @@ public class ManualJsonConvert {
                 lStringBuilder.append("\""+PgActivity.pgmemtblList.get(i).getPgcode()+"\"");
                 lStringBuilder.append(",");
 
+                String guid,membercode;
+
+                guid =PgActivity.pgmemtblList.get(i).getUid();
+                if(!guid.equals("")){
+                    membercode = "0";
+                }else{
+                    membercode = PgActivity.pgmemtblList.get(i).getGrpmemcode();
+                }
+
                 lStringBuilder.append("\"Guid\"");
                 lStringBuilder.append(":");
                 lStringBuilder.append("\""+PgActivity.pgmemtblList.get(i).getUid()+"\"");
@@ -111,7 +123,7 @@ public class ManualJsonConvert {
 
                 lStringBuilder.append("\"Group_M_Code\"");
                 lStringBuilder.append(":");
-                lStringBuilder.append("\""+PgActivity.pgmemtblList.get(i).getGrpmemcode()+"\"");
+                lStringBuilder.append("\""+membercode+"\"");
                 lStringBuilder.append(",");
 
                 lStringBuilder.append("\"FatherName\"");
@@ -196,13 +208,14 @@ public class ManualJsonConvert {
             lStringBuilder.append("\"tblMstGroupMembers_Johar\"");
             lStringBuilder.append(":");
             lStringBuilder.append("[");
+            String userId="";
+            List<Logintbl> logintblList = Logintbl.listAll(Logintbl.class);
+            if(logintblList.size()>0){
+                userId = logintblList.get(0).getUserid();
+            }
+
             for (int i = 0; i< PgActivity.shgmemberslocallyaddedtblList.size(); i++){
                 String districtCode="",blockcode="",clusterCode="",villageCode="";
-                String userId="";
-                List<Logintbl> logintblList = Logintbl.listAll(Logintbl.class);
-                if(logintblList.size()>0){
-                    userId = logintblList.get(0).getUserid();
-                }
 
                 List<Pgtbl> pgtblList = Select.from(Pgtbl.class)
                         .where(Condition.prop("Pgcode").eq(PgActivity.pgmemtblList.get(i).getPgcode()))
@@ -270,9 +283,18 @@ public class ManualJsonConvert {
                 lStringBuilder.append("\""+PgActivity.shgmemberslocallyaddedtblList.get(i).getGrpcode()+"\"");
                 lStringBuilder.append(",");
 
+                String guid,membercode;
+
+                guid =PgActivity.shgmemberslocallyaddedtblList.get(i).getUid();
+                if(!guid.equals("")){
+                    membercode = "0";
+                }else{
+                    membercode = PgActivity.shgmemberslocallyaddedtblList.get(i).getGrpmemcode();
+                }
+
                 lStringBuilder.append("\"Group_M_Code\"");
                 lStringBuilder.append(":");
-                lStringBuilder.append("\""+PgActivity.shgmemberslocallyaddedtblList.get(i).getGrpmemcode()+"\"");
+                lStringBuilder.append("\""+membercode+"\"");
                 lStringBuilder.append(",");
 
                 lStringBuilder.append("\"Gender\"");
@@ -317,6 +339,73 @@ public class ManualJsonConvert {
 
                 lStringBuilder.append("}");
                 if(i<PgActivity.shgmemberslocallyaddedtblList.size()-1) {
+                    lStringBuilder.append(",");
+                }
+            }
+
+            lStringBuilder.append("]");
+            lStringBuilder.append("}");
+            JsonString = lStringBuilder.toString();
+        }
+
+
+        //next if
+        if(tblIdentifier.equals("PgMeetingtbl")){
+            StringBuilder lStringBuilder = new StringBuilder();
+            lStringBuilder.append("{");
+            lStringBuilder.append("\"PgMeetingtbl\"");
+            lStringBuilder.append(":");
+            lStringBuilder.append("[");
+            String userId="";
+            List<Logintbl> logintblList = Logintbl.listAll(Logintbl.class);
+            if(logintblList.size()>0){
+                userId = logintblList.get(0).getUserid();
+            }
+            for (int i = 0; i< PgActivity.pgMeetingtblList.size(); i++){
+
+                lStringBuilder.append("{");
+                lStringBuilder.append("\"Meetingid\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgMeetingtblList.get(i).getMeetingid()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"Meetingdate\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgMeetingtblList.get(i).getMeetingdate()+"\"");
+
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"Noofpeople\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgMeetingtblList.get(i).getNoofpeople()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"Pgcode\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgMeetingtblList.get(i).getPgcode()+"\"");
+                lStringBuilder.append(",");
+
+
+                lStringBuilder.append("\"Cadres\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgMeetingtblList.get(i).getCadres()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"CreatedOn\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+""+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"CreatedBy\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+userId+"\"");
+
+
+
+
+
+                lStringBuilder.append("}");
+                if(i<PgActivity.pgMeetingtblList.size()-1) {
                     lStringBuilder.append(",");
                 }
             }
