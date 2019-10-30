@@ -3,7 +3,9 @@ package com.jslps.pgmisnew.interactor;
 import com.jslps.pgmisnew.database.Logintbl;
 import com.jslps.pgmisnew.database.PgPaymentHeadModel;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
+import com.jslps.pgmisnew.database.PgReceiptDisData;
 import com.jslps.pgmisnew.database.PgReceiptTranstbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.util.SeedDataPgPaymentHead;
 import com.orm.query.Condition;
 import com.orm.query.Select;
@@ -16,13 +18,15 @@ public class PgReceiptInteractor {
 
     public interface PgreceiptInteractor {
 
-        void getHeadList(List<PgPaymentHeadModel> list);
+        void getHeadList(List<TblMstPgPaymentReceipthead> list);
         void dataSaved();
         void dataEdited();
     }
 
     public void getHeadList(PgreceiptInteractor listner){
-        List<PgPaymentHeadModel> list = SeedDataPgPaymentHead.getListData();
+        List<TblMstPgPaymentReceipthead> list = Select.from(TblMstPgPaymentReceipthead.class)
+                .whereOr(Condition.prop("showin").eq("B"),Condition.prop("showin").eq("R"))
+                .list();
         listner.getHeadList(list);
     }
 
@@ -38,6 +42,13 @@ public class PgReceiptInteractor {
     public List<PgReceiptTranstbl> getPgReceiptTransList(PgreceiptInteractor listner, String pgCode) {
 
         return Select.from(PgReceiptTranstbl.class)
+                .where(Condition.prop("pgcode").eq(pgCode))
+                .list();
+    }
+
+    public List<PgReceiptDisData> getPgReceiptDisList(PgreceiptInteractor listner, String pgCode) {
+
+        return Select.from(PgReceiptDisData.class)
                 .where(Condition.prop("pgcode").eq(pgCode))
                 .list();
     }

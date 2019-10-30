@@ -24,7 +24,7 @@ public class SeedDataPgActivity {
             "सदस्यों का विवरण",
             "शेयर पूंजी",
             "PG PAYMENT",
-            "WUG"
+            "PAYMENT RECEIPT REPORT"
     };
 
     private static final String[] title2 = new String[] {
@@ -38,7 +38,7 @@ public class SeedDataPgActivity {
             R.drawable.member_detail_icon,
             R.drawable.share_capital_icon,
             R.drawable.ic_pay,
-            R.drawable.member_detail_icon
+            R.drawable.ic_progress_report
 
     };
 

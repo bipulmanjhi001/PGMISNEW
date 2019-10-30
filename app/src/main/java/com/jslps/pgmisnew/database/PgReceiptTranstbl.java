@@ -15,7 +15,7 @@ public class PgReceiptTranstbl extends SugarRecord {
     private String createdby;
     private String createdid;
     private String isexported;
-
+    //here in place of budgetcode budgetid is put,if budgetcode is needed it can be found from TblMstpgPaymentReceipthead
     public PgReceiptTranstbl() {
     }
 

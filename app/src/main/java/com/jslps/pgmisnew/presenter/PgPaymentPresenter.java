@@ -2,6 +2,7 @@ package com.jslps.pgmisnew.presenter;
 
 import com.jslps.pgmisnew.database.PgPaymentHeadModel;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.interactor.PgPaymentInteractor;
 import com.jslps.pgmisnew.view.PgPaymentView;
 
@@ -21,7 +22,7 @@ public class PgPaymentPresenter implements PgPaymentInteractor.pgpaymentinteract
     }
 
     @Override
-    public void getHeadList(List<PgPaymentHeadModel> list) {
+    public void getHeadList(List<TblMstPgPaymentReceipthead> list) {
         pgPaymentView.getHeadList(list);
     }
 

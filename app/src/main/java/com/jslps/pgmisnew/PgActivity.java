@@ -22,18 +22,23 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.jslps.pgmisnew.adapter.PgActivityAdapter;
 import com.jslps.pgmisnew.database.PgActivityModel;
 import com.jslps.pgmisnew.database.PgMeetingtbl;
+import com.jslps.pgmisnew.database.PgReceiptDisData;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
 import com.jslps.pgmisnew.database.Shgmemberslocallyaddedtbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.interactor.PgActivityInteractor;
 import com.jslps.pgmisnew.presenter.PgActivityPresenter;
 import com.jslps.pgmisnew.util.AppConstant;
 import com.jslps.pgmisnew.util.CheckConnectivity;
 import com.jslps.pgmisnew.util.GetUrlDownloadMeeting;
+import com.jslps.pgmisnew.util.GetUrlDownloadPaymentMIs;
+import com.jslps.pgmisnew.util.GetUrlDownloadPaymentReceiptDis;
 import com.jslps.pgmisnew.util.GetUrlUploadMeeting;
 import com.jslps.pgmisnew.util.GetUrlUploadSHGANDPG;
 import com.jslps.pgmisnew.util.ManualJsonConvert;
@@ -113,6 +118,8 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
             //calling download websevices here
             DialogShowDownload();
             presenter.callDownloadWebServicesMeetingtbl();
+            presenter.callDownloadWebservicePaymentReceiptDis();
+            presenter.callDownloadWebservicePgMis();
         }
     }
 
@@ -156,12 +163,13 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
 
 
         //for temporary basis and should be removed
-        if(item.getId1()==1||item.getId2()==2||item.getId1()==3||item.getId2()==4||item.getId1()==7||item.getId2()==8){
+        if(item.getId1()==1||item.getId2()==2||item.getId1()==3||item.getId2()==4||item.getId2()==8){
             layout1.setVisibility(View.GONE);
             layout2.setVisibility(View.GONE);
-        }else{
+        }
+
+        if(item.getId1()==7){
             layout1.setVisibility(View.VISIBLE);
-            layout2.setVisibility(View.VISIBLE);
         }
 
 
@@ -188,6 +196,9 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                             startActivity(intent);
                         } else if(item.getId1() == 5){
                             Intent intent = new Intent(PgActivity.this, PgpaymentActivity.class);
+                            startActivity(intent);
+                        } else if(item.getId1() == 7){
+                            Intent intent = new Intent(PgActivity.this, PgPaymentReceiptReport.class);
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(PgActivity.this, Test.class);
@@ -357,6 +368,7 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     @Override
     public void callDownloadWebServicesMeetingtbl() {
         //herez
+
         CheckConnectivity checkConnectivity = new CheckConnectivity();
         if(checkConnectivity.CheckConnection(this)){
             List<Pgtbl> pgtblList = Pgtbl.listAll(Pgtbl.class);
@@ -369,7 +381,9 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
             }
 
             String pgCSV =pgCodeList.toString().replace("[", "").replace("]", "")
-                    .replace(", ", ","); ;
+                    .replace(", ", ",");
+
+
             RequestQueue mRequestQueue;
             StringRequest mStringRequest;
             mRequestQueue = Volley.newRequestQueue(this);
@@ -385,6 +399,79 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                     .textColor(Color.WHITE)
                     .backgroundColor(getResources().getColor(R.color.colorPrimary))
                     .show();
+        }
+    }
+
+    @Override
+    public void callDownloadWebservicePaymentReceiptDis() {
+        //herez
+        CheckConnectivity checkConnectivity = new CheckConnectivity();
+        if(checkConnectivity.CheckConnection(this)){
+            List<Pgtbl> pgtblList = Pgtbl.listAll(Pgtbl.class);
+            List<String> pgCodeList = new ArrayList<>();
+
+            if(pgtblList.size()>0){
+                for(int i=0;i<pgtblList.size();i++){
+                    pgCodeList.add(pgtblList.get(i).getPgcode());
+                }
+            }
+
+            String pgCSV =pgCodeList.toString().replace("[", "").replace("]", "")
+                    .replace(", ", ",");
+
+
+            RequestQueue mRequestQueue;
+            StringRequest mStringRequest;
+            mRequestQueue = Volley.newRequestQueue(this);
+
+            mStringRequest = new VolleyString(new GetUrlDownloadPaymentReceiptDis(AppConstant.domain,AppConstant.GetDisbursementList,pgCSV).getUrl(),AppConstant.PgPaymentReceiptDisDownload,this).getString();
+            mRequestQueue.add(mStringRequest);
+
+        }else{
+            new StyleableToast
+                    .Builder(this)
+                    .text(getString(R.string.internet_error))
+                    .iconStart(R.drawable.wrong_icon_white)
+                    .textColor(Color.WHITE)
+                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                    .show();
+        }
+    }
+
+    @Override
+    public void callDownloadWebservicePgMis() {
+        //herez
+        CheckConnectivity checkConnectivity = new CheckConnectivity();
+        if(checkConnectivity.CheckConnection(this)){
+            List<Pgtbl> pgtblList = Pgtbl.listAll(Pgtbl.class);
+            List<String> pgCodeList = new ArrayList<>();
+
+            if(pgtblList.size()>0){
+                for(int i=0;i<pgtblList.size();i++){
+                    pgCodeList.add(pgtblList.get(i).getPgcode());
+                }
+            }
+
+            String pgCSV =pgCodeList.toString().replace("[", "").replace("]", "")
+                    .replace(", ", ",");
+
+
+            RequestQueue mRequestQueue;
+            StringRequest mStringRequest;
+            mRequestQueue = Volley.newRequestQueue(this);
+
+            mStringRequest = new VolleyString(new GetUrlDownloadPaymentMIs(AppConstant.domain,AppConstant.DownLoadPGMIS,pgCSV,AppConstant.DownLoadPGMISflag).getUrl(),AppConstant.PGMISDOWNLOADIdentifier,this).getString();
+            mRequestQueue.add(mStringRequest);
+
+        }else{
+            new StyleableToast
+                    .Builder(this)
+                    .text(getString(R.string.internet_error))
+                    .iconStart(R.drawable.wrong_icon_white)
+                    .textColor(Color.WHITE)
+                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                    .show();
+
         }
     }
 
@@ -581,6 +668,107 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                        PgMeetingtbl data = new PgMeetingtbl(list.get(i).getMeetingid(),list.get(i).getMeetingdate(),list.get(i).getNoofpeople(),list.get(i).getCadres(),list.get(i).getPgcode(),"1");
                        data.save();
                     }
+                    DialogClose();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    DialogClose();
+                }
+            }
+        }
+
+        if(tableIndentifier.equals(AppConstant.PgPaymentReceiptDisDownload)){
+            if(result.equals("[]")){
+                new StyleableToast
+                        .Builder(this)
+                        .text("No data found for PgPaymentReceiptDisDownload ")
+                        .iconStart(R.drawable.wrong_icon_white)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+                DialogClose();
+            }else{
+
+                try {
+
+
+                    JSONArray jsonArray = new JSONArray(result);
+
+                    for(int i=0;i<jsonArray.length();i++){
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String budget_code = jsonObject.optString("ActivityCode");
+                        String budget_head = jsonObject.optString("Budget");
+                        String account_no = jsonObject.optString("AccountNumber");
+                        String ekoshamount = jsonObject.optString("EKoshAmount");
+                        String pgcode = jsonObject.optString("PGCode");
+                        String approveddate = jsonObject.optString("ApprovedOn");
+                        String budget_id = jsonObject.optString("ID");
+
+                        PgReceiptDisData data = new PgReceiptDisData(budget_head,budget_code,account_no,ekoshamount,pgcode,approveddate,budget_id);
+                        data.save();
+
+                    }
+                    DialogClose();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    DialogClose();
+                }
+            }
+        }
+
+
+
+        if(tableIndentifier.equals(AppConstant.PGMISDOWNLOADIdentifier)){
+            if(result.equals("[]")){
+                new StyleableToast
+                        .Builder(this)
+                        .text("No data found for pg mis download")
+                        .iconStart(R.drawable.wrong_icon_white)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+                DialogClose();
+            }else{
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("Table");
+                    JSONArray jsonArray1 = jsonObject.getJSONArray("Table1");
+
+                    //enter in first position
+                    TblMstPgPaymentReceipthead datainit = new TblMstPgPaymentReceipthead("0","0","Select Head Name","B","");
+                    datainit.save();
+
+                    for(int i=0 ;i<jsonArray.length();i++){
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String budgetid= object.optString("ID");
+                        String budgetcode= object.optString("BudgetCode");
+                        String headname= object.optString("Disbursement");
+                        String showin= object.optString("ShowIn");
+                        String headnamehindi= object.optString("DisbursementHind");
+
+                        TblMstPgPaymentReceipthead data = new TblMstPgPaymentReceipthead(budgetid,budgetcode,headname,showin,headnamehindi);
+                        data.save();
+                    }
+
+                    for(int j=0;j<jsonArray1.length();j++){
+//                        JSONObject object = jsonArray1.getJSONObject(j);
+//                         String uuid= object.optString("uuid");
+//                         String budgetcode= object.optString("BudgetHeadID");
+//                         String headname= object.optString("");
+//                         String date= object.optString("Date");
+//                         String amount= object.optString("Amt");
+//                         String remark= object.optString("");
+//                         String pgcode= object.optString("");
+//                         String createdby= object.optString("");
+//                         String createdid= object.optString("");
+//                         String isexported= "1";
+                    }
+
+
                     DialogClose();
 
                 } catch (JSONException e) {

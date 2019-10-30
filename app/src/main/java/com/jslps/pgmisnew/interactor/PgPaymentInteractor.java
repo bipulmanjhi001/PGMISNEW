@@ -7,6 +7,7 @@ import com.jslps.pgmisnew.database.Pgtbl;
 import com.jslps.pgmisnew.database.ShgModel;
 import com.jslps.pgmisnew.database.Shgmemnonpg;
 import com.jslps.pgmisnew.database.Shgtbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.presenter.PgPaymentPresenter;
 import com.jslps.pgmisnew.util.SeedDataPgPaymentHead;
 import com.orm.query.Condition;
@@ -23,14 +24,18 @@ public class PgPaymentInteractor {
 
     public interface pgpaymentinteractor {
 
-        void getHeadList(List<PgPaymentHeadModel> list);
+        void getHeadList(List<TblMstPgPaymentReceipthead> list);
         void dataSaved();
         void dataEdited();
     }
 
     public void getHeadList(pgpaymentinteractor listner){
-        List<PgPaymentHeadModel> list = SeedDataPgPaymentHead.getListData();
+        List<TblMstPgPaymentReceipthead> list = Select.from(TblMstPgPaymentReceipthead.class)
+                .whereOr(Condition.prop("showin").eq("B"),Condition.prop("showin").eq("P"))
+                .list();
         listner.getHeadList(list);
+
+
     }
 
     public String[] getUserDetails(pgpaymentinteractor listner) {

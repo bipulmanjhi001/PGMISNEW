@@ -2,7 +2,9 @@ package com.jslps.pgmisnew.presenter;
 
 import com.jslps.pgmisnew.database.PgPaymentHeadModel;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
+import com.jslps.pgmisnew.database.PgReceiptDisData;
 import com.jslps.pgmisnew.database.PgReceiptTranstbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.interactor.PgReceiptInteractor;
 import com.jslps.pgmisnew.view.PgReceiptView;
 
@@ -23,7 +25,7 @@ public class PgReceiptPresenter implements PgReceiptInteractor.PgreceiptInteract
     }
 
     @Override
-    public void getHeadList(List<PgPaymentHeadModel> list) {
+    public void getHeadList(List<TblMstPgPaymentReceipthead> list) {
         pgReceiptView.getHeadList(list);
     }
 
@@ -70,6 +72,10 @@ public class PgReceiptPresenter implements PgReceiptInteractor.PgreceiptInteract
         return  pgReceiptInteractor.getPgReceiptTransList(this,pgCodeSelected);
     }
 
+    public List<PgReceiptDisData> getPgReceiptDisList(String pgCodeSelected) {
+        return  pgReceiptInteractor.getPgReceiptDisList(this,pgCodeSelected);
+    }
+
     public void setRecyclerView() {
         pgReceiptView.setRecyclerView();
     }
@@ -88,5 +94,13 @@ public class PgReceiptPresenter implements PgReceiptInteractor.PgreceiptInteract
 
     public void saveEditedData(String budget_code, String head_name, String date, String amount, String remark, String pgCode, String username, String userid, String isexported, PgReceiptTranstbl pgReceiptTranstbl) {
         pgReceiptInteractor.saveEditedData(this,budget_code,head_name,date,amount,remark,pgCode,username,userid,isexported,pgReceiptTranstbl);
+    }
+
+    public void openDisburmentLayout() {
+        pgReceiptView.openDisbursmentlayout();
+    }
+
+    public void setRecyclerViewDisbursementData() {
+        pgReceiptView.setRecyclerViewDisbursementData();
     }
 }

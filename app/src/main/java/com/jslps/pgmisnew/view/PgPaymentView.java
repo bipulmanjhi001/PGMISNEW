@@ -2,12 +2,13 @@ package com.jslps.pgmisnew.view;
 
 import com.jslps.pgmisnew.database.PgPaymentHeadModel;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 
 import java.util.List;
 
 public interface PgPaymentView {
 
-    void getHeadList(List<PgPaymentHeadModel> list);
+    void getHeadList(List<TblMstPgPaymentReceipthead> list);
 
     void setSpinnerHead();
 

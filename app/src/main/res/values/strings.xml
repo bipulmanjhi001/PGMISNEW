@@ -88,6 +88,7 @@
     <string name="delete_sure">क्या आप पक्का इसे हटाना चाहते हैं</string>
     <string name="select_headd">Please Select Head</string>
     <string name="blank_date">Date Can\'t be Blank</string>
+    <string name="atleast_one_date">Please Select atleast one date</string>
 
 
     <string-array name="pg_list">

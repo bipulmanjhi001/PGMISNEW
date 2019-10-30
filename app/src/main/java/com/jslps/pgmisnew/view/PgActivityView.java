@@ -33,4 +33,8 @@ public interface PgActivityView {
     void callUploadApiMeeting(String sData);
 
     void callDownloadWebServicesMeetingtbl();
+
+    void callDownloadWebservicePaymentReceiptDis();
+
+    void callDownloadWebservicePgMis();
 }

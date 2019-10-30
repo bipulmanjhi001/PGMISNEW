@@ -22,12 +22,14 @@ import android.widget.Toast;
 import com.jslps.pgmisnew.adapter.PgPaymentAdapter;
 import com.jslps.pgmisnew.database.PgPaymentHeadModel;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.interactor.PgPaymentInteractor;
 import com.jslps.pgmisnew.presenter.PgPaymentPresenter;
 import com.jslps.pgmisnew.util.AppConstant;
 import com.jslps.pgmisnew.util.SetSpinnerText;
 import com.jslps.pgmisnew.view.PgPaymentView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -53,7 +55,7 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
     @BindView(R.id.textView23)
     TextView textView23;
     @BindView(R.id.spinner2)
-    Spinner spinner2;
+    SearchableSpinner spinner2;
     @BindView(R.id.textView71)
     TextView textView71;
     @BindView(R.id.imageView16)
@@ -75,9 +77,9 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
 
     /*Defining objects*/
     PgPaymentPresenter presenter;
-    List<PgPaymentHeadModel> pgPaymentHeadModelList;
-    public ArrayAdapter<PgPaymentHeadModel> headSpinAdapter;
-    PgPaymentHeadModel headModelSelected;
+    List<TblMstPgPaymentReceipthead> pgPaymentHeadModelList;
+    public ArrayAdapter<TblMstPgPaymentReceipthead> headSpinAdapter;
+    TblMstPgPaymentReceipthead headModelSelected;
     PgPaymentAdapter aAdapter;
     List<PgPaymentTranstbl> pgPaymentTranstblList;
     private PgPaymentTranstbl pgPaymentSelectedItem;
@@ -105,28 +107,15 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
 
 
     @Override
-    public void getHeadList(List<PgPaymentHeadModel> list) {
+    public void getHeadList(List<TblMstPgPaymentReceipthead> list) {
         pgPaymentHeadModelList = list;
 
     }
 
     @Override
     public void setSpinnerHead() {
-        headSpinAdapter = new ArrayAdapter<PgPaymentHeadModel>(this, android.R.layout.simple_spinner_dropdown_item, pgPaymentHeadModelList) {
+        headSpinAdapter = new ArrayAdapter<TblMstPgPaymentReceipthead>(this, android.R.layout.simple_spinner_dropdown_item, pgPaymentHeadModelList) {
 
-            @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                if (position == 0) {
-                    // Set the hint text color gray
-                    tv.setTextColor(getResources().getColor(R.color.colorGrayHint));
-                } else {
-//                        tv.setTextColor(getResources().getColor(R.color.colorGray));
-                }
-                return view;
-            }
         };
         spinner2.setAdapter(headSpinAdapter);
     }
@@ -250,7 +239,7 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
         if (position == 0) {
             ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.colorGrayHint));
         }
-        headModelSelected = (PgPaymentHeadModel) parent.getSelectedItem();
+        headModelSelected = (TblMstPgPaymentReceipthead) parent.getSelectedItem();
 
     }
 
@@ -268,8 +257,8 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
             case R.id.button4:
                 //for saving
                 if (validation()) {
-                    String budget_code = headModelSelected.getBudgetcode();
-                    String head_name = headModelSelected.getHead_name();
+                    String budget_code = headModelSelected.getBudgetid();
+                    String head_name = headModelSelected.getHeadname();
                     String date = textView71.getText().toString();
                     String amount = etEnterAmount.getText().toString();
                     String remark = etEnterRemark.getText().toString();
@@ -308,6 +297,20 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+        String newDay = dayOfMonth+"";
+        String newMonth = (monthOfYear+1)+"";
+
+
+        if((monthOfYear+1)<10){
+            newMonth="0"+newMonth;
+        }
+
+        if(dayOfMonth<10){
+            newDay = "0"+dayOfMonth;
+        }
+
+        String newDate = year+"/"+newMonth+"/"+newDay;
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
         String currentDate = new SimpleDateFormat("d/M/yyyy", Locale.getDefault()).format(new Date());
@@ -323,7 +326,7 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
         if (date1 != null && date1.compareTo(date2) > 0) {
             Toast.makeText(PgpaymentActivity.this, "Please Select Valid Date", Toast.LENGTH_LONG).show();
         } else {
-            textView71.setText(date);
+            textView71.setText(newDate);
             textView71.setHint("");
 
         }

@@ -208,6 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
                     .textColor(Color.WHITE)
                     .backgroundColor(getResources().getColor(R.color.colorPrimary))
                     .show();
+            btnlogin.revertAnimation();
         }
     }
 

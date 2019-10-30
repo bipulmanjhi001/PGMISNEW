@@ -76,4 +76,11 @@ public class PgActivityPresenter implements PgActivityInteractor.pgActivityInter
         pgActivityView.callDownloadWebServicesMeetingtbl();
     }
 
+    public void callDownloadWebservicePaymentReceiptDis() {
+        pgActivityView.callDownloadWebservicePaymentReceiptDis();
+    }
+
+    public void callDownloadWebservicePgMis() {
+        pgActivityView.callDownloadWebservicePgMis();
+    }
 }
