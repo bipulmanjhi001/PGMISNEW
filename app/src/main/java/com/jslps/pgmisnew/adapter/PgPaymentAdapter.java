@@ -90,7 +90,7 @@ public class PgPaymentAdapter extends RecyclerView.Adapter<PgPaymentAdapter.MyVi
 
         holder.textView76.setText(item.getDate());
         holder.textView77.setText(item.getHeadname());
-        holder.textView78.setText(item.getAmount());
+        holder.textView78.setText(item.getAmount()+"("+item.getPaymentmode()+")");
         holder.textView79.setText(item.getRemark());
 
         //condition to make edit and delete visible

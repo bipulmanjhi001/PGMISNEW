@@ -23,14 +23,14 @@ public class SeedDataPgActivity {
     private static final String[] title1 = new String[] {
             "सदस्यों का विवरण",
             "शेयर पूंजी",
-            "PG PAYMENT",
-            "PAYMENT RECEIPT REPORT"
+            "उत्पादक समूह द्वारा भुगतान",
+            "प्राप्ति भुगतान रिपोर्ट"
     };
 
     private static final String[] title2 = new String[] {
             "सदस्यता शुल्क",
             "बैठक का विवरण",
-            "PG RECEIPT",
+            "उत्पादक समूह को प्राप्ति",
             "",
     };
 

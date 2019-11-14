@@ -83,4 +83,8 @@ public class PgActivityPresenter implements PgActivityInteractor.pgActivityInter
     public void callDownloadWebservicePgMis() {
         pgActivityView.callDownloadWebservicePgMis();
     }
+
+    public void callUploadPgPaymentTrans(String json4) {
+        pgActivityView.callUploadPgPaymentTrans(json4);
+    }
 }

@@ -13,6 +13,7 @@ public class AppConstant {
     public static final String Download_Johar_TabletData_Service="Download_Johar_TabletData_Service";
     public static final String GetDisbursementList="GetDisbursementList";
     public static final String DownLoadPGMIS="DownLoadPGMIS";
+    public static final String UploadPGMIS="UploadPGMIS";
 
 
     //table indentifier
@@ -22,6 +23,7 @@ public class AppConstant {
     public static final String PgMeetingtblDownload="4";
     public static final String PgPaymentReceiptDisDownload="5";
     public static final String PGMISDOWNLOADIdentifier="6";
+    public static final String PGPAYMENTTRANS="7";
 
 
     //flags

@@ -60,8 +60,8 @@ public class PgPaymentPresenter implements PgPaymentInteractor.pgpaymentinteract
         return pgPaymentInteractor.getUserDetails(this);
     }
 
-    public void saveData(String budget_code, String head_name, String date, String amount, String remark, String pgCode, String username, String userid, String isexported) {
-        pgPaymentInteractor.saveData(this,budget_code,head_name,date,amount,remark,pgCode,username,userid,isexported);
+    public void saveData(String budget_code, String head_name, String date, String amount, String remark, String pgCode, String username, String userid, String isexported,String paymentmode) {
+        pgPaymentInteractor.saveData(this,budget_code,head_name,date,amount,remark,pgCode,username,userid,isexported,paymentmode);
     }
 
 
@@ -87,5 +87,9 @@ public class PgPaymentPresenter implements PgPaymentInteractor.pgpaymentinteract
 
     public void saveEditedData(String budget_code, String head_name, String date, String amount, String remark, String pgCode, String username, String userid, String isexported, PgPaymentTranstbl pgPaymentSelectedItem) {
         pgPaymentInteractor.saveEditedData(this,budget_code,head_name,date,amount,remark,pgCode,username,userid,isexported,pgPaymentSelectedItem);
+    }
+
+    public void blankPaymentMode() {
+        pgPaymentView. blankPaymentMode();
     }
 }

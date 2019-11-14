@@ -32,4 +32,6 @@ public interface PgPaymentView {
 
 
     void dataEdited();
+
+    void blankPaymentMode();
 }

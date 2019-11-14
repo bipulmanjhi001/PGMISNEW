@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jslps.pgmisnew.adapter.PgPaymentAdapter;
-import com.jslps.pgmisnew.database.PgPaymentHeadModel;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
 import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.interactor.PgPaymentInteractor;
@@ -74,14 +72,18 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
     TextInputEditText etEnterRemark;
     @BindView(R.id.recyler_list)
     RecyclerView recylerList;
+    @BindView(R.id.spinner3)
+    Spinner spinner3;
 
     /*Defining objects*/
     PgPaymentPresenter presenter;
     List<TblMstPgPaymentReceipthead> pgPaymentHeadModelList;
     public ArrayAdapter<TblMstPgPaymentReceipthead> headSpinAdapter;
     TblMstPgPaymentReceipthead headModelSelected;
+    String selectedPaymentMode;
     PgPaymentAdapter aAdapter;
     List<PgPaymentTranstbl> pgPaymentTranstblList;
+
     private PgPaymentTranstbl pgPaymentSelectedItem;
 
 
@@ -99,6 +101,7 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
         AppConstant.editpgpaymentrecord = false;
         presenter = new PgPaymentPresenter(new PgPaymentInteractor(), this);
         spinner2.setOnItemSelectedListener(this);
+        spinner3.setOnItemSelectedListener(this);
         presenter.getHeadList();
         presenter.setSpinnerHead();
         presenter.setRecyclerView();
@@ -184,7 +187,7 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
     public void setRecyclerView() {
         pgPaymentTranstblList = presenter.getPgPaymentTranstblList(PgActivity.pgCodeSelected);
         Collections.reverse(pgPaymentTranstblList);
-        aAdapter = new PgPaymentAdapter(this,pgPaymentTranstblList,presenter);
+        aAdapter = new PgPaymentAdapter(this, pgPaymentTranstblList, presenter);
         LinearLayoutManager verticalLayoutmanager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recylerList.setLayoutManager(verticalLayoutmanager);
@@ -203,18 +206,25 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
         textView71.setHint("Click Calender to Enter Date");
         etEnterAmount.setText("");
         etEnterRemark.setText("");
+        spinner3.setSelection(0);
 
     }
 
     @Override
     public void editRecord(PgPaymentTranstbl item) {
-        new SetSpinnerText(spinner2,item.getHeadname());
+        new SetSpinnerText(spinner2, item.getHeadname());
         textView71.setText(item.getDate());
         textView71.setHint("");
         etEnterAmount.setText(item.getAmount());
         etEnterRemark.setText(item.getRemark());
         AppConstant.editpgpaymentrecord = true;
         pgPaymentSelectedItem = item;
+        if(item.getPaymentmode().equals("Cash")){
+            spinner3.setSelection(1);
+        }else{
+            spinner3.setSelection(2);
+        }
+
     }
 
     @Override
@@ -229,17 +239,44 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
 
         presenter.setRecyclerView();
         presenter.clearForm();
-        AppConstant.editpgpaymentrecord =false;
+        AppConstant.editpgpaymentrecord = false;
+    }
+
+    @Override
+    public void blankPaymentMode() {
+        new StyleableToast
+                .Builder(this)
+                .text("Please Select Payment Mode")
+                .iconStart(R.drawable.wrong_icon_white)
+                .textColor(Color.WHITE)
+                .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                .show();
     }
 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // First item will be gray
-        if (position == 0) {
-            ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.colorGrayHint));
+
+        switch (parent.getId()){
+            case R.id.spinner2:
+                // First item will be gray
+                if (position == 0) {
+                    ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.colorGrayHint));
+                }
+                headModelSelected = (TblMstPgPaymentReceipthead) parent.getSelectedItem();
+                break;
+
+            case R.id.spinner3:
+                // First item will be gray
+                if (position == 0) {
+                    ((TextView) view).setTextColor(ContextCompat.getColor(this, R.color.colorGrayHint));
+                }
+
+                selectedPaymentMode =  parent.getSelectedItem().toString();
+                break;
+
         }
-        headModelSelected = (TblMstPgPaymentReceipthead) parent.getSelectedItem();
+
 
     }
 
@@ -267,10 +304,10 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
                     String username = userDetails[0];
                     String userid = userDetails[1];
                     String isexported = "0";
-                    if(AppConstant.editpgpaymentrecord){
-                        presenter.saveEditedData(budget_code, head_name, date, amount, remark, pgCode, username, userid, isexported,pgPaymentSelectedItem);
-                    }else{
-                        presenter.saveData(budget_code, head_name, date, amount, remark, pgCode, username, userid, isexported);
+                    if (AppConstant.editpgpaymentrecord) {
+                        presenter.saveEditedData(budget_code, head_name, date, amount, remark, pgCode, username, userid, isexported, pgPaymentSelectedItem);
+                    } else {
+                        presenter.saveData(budget_code, head_name, date, amount, remark, pgCode, username, userid, isexported,selectedPaymentMode);
                     }
 
                 }
@@ -287,6 +324,8 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
             presenter.blankDate();
         } else if (etEnterAmount.getText().toString().equals("") || etEnterAmount.getText().toString().equals("0")) {
             presenter.blankamount();
+        }else if (selectedPaymentMode.equals("Select Payment")) {
+            presenter.blankPaymentMode();
         } else {
             result = true;
         }
@@ -297,19 +336,19 @@ public class PgpaymentActivity extends AppCompatActivity implements PgPaymentVie
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-        String newDay = dayOfMonth+"";
-        String newMonth = (monthOfYear+1)+"";
+        String newDay = dayOfMonth + "";
+        String newMonth = (monthOfYear + 1) + "";
 
 
-        if((monthOfYear+1)<10){
-            newMonth="0"+newMonth;
+        if ((monthOfYear + 1) < 10) {
+            newMonth = "0" + newMonth;
         }
 
-        if(dayOfMonth<10){
-            newDay = "0"+dayOfMonth;
+        if (dayOfMonth < 10) {
+            newDay = "0" + dayOfMonth;
         }
 
-        String newDate = year+"/"+newMonth+"/"+newDay;
+        String newDate = year + "/" + newMonth + "/" + newDay;
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");

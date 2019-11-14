@@ -54,8 +54,8 @@ public class PgPaymentInteractor {
                 .list();
     }
 
-    public void saveData(pgpaymentinteractor listner,String budget_code, String head_name, String date, String amount, String remark, String pgCode, String username, String userid, String isexported) {
-        PgPaymentTranstbl data = new PgPaymentTranstbl(UUID.randomUUID().toString(),budget_code,head_name,date,amount,remark,pgCode,username,userid,isexported);
+    public void saveData(pgpaymentinteractor listner,String budget_code, String head_name, String date, String amount, String remark, String pgCode, String username, String userid, String isexported,String Paymentmode) {
+        PgPaymentTranstbl data = new PgPaymentTranstbl(UUID.randomUUID().toString(),budget_code,head_name,date,amount,remark,pgCode,username,userid,isexported,Paymentmode);
         data.save();
         listner.dataSaved();
     }

@@ -37,4 +37,6 @@ public interface PgActivityView {
     void callDownloadWebservicePaymentReceiptDis();
 
     void callDownloadWebservicePgMis();
+
+    void callUploadPgPaymentTrans(String json4);
 }

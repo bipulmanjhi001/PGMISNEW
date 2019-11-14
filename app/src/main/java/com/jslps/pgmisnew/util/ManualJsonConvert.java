@@ -416,6 +416,90 @@ public class ManualJsonConvert {
         }
 
 
+        if(tblIdentifier.equals("tblPGMISTransPaymentReceipt")){
+            StringBuilder lStringBuilder = new StringBuilder();
+            lStringBuilder.append("{");
+            lStringBuilder.append("\"tblPGMISTransPaymentReceipt\"");
+            lStringBuilder.append(":");
+            lStringBuilder.append("[");
+            String userId="";
+            String username="";
+            List<Logintbl> logintblList = Logintbl.listAll(Logintbl.class);
+            if(logintblList.size()>0){
+                userId = logintblList.get(0).getUserid();
+                username= logintblList.get(0).getUsername();
+            }
+            for (int i = 0; i< PgActivity.pgPaymentTranstblList.size(); i++){
+
+                lStringBuilder.append("{");
+                lStringBuilder.append("\"uuid\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getUuid()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"BudgetHeadID\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getBudgetcode()+"\"");
+
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"PGCode\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getPgcode()+"\"");
+                lStringBuilder.append(",");
+
+
+                lStringBuilder.append("\"Date\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getDate()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"Amt\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getAmount()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"Createdby\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+username+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"IsPayment\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+"P"+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"Remarks\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getRemark()+"\"");
+                lStringBuilder.append(",");
+
+                lStringBuilder.append("\"PMode\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+PgActivity.pgPaymentTranstblList.get(i).getPaymentmode()+"\"");
+                lStringBuilder.append(",");
+
+
+                lStringBuilder.append("\"CreatedID\"");
+                lStringBuilder.append(":");
+                lStringBuilder.append("\""+userId+"\"");
+
+
+
+
+
+                lStringBuilder.append("}");
+                if(i<PgActivity.pgPaymentTranstblList.size()-1) {
+                    lStringBuilder.append(",");
+                }
+            }
+
+            lStringBuilder.append("]");
+            lStringBuilder.append("}");
+            JsonString = lStringBuilder.toString();
+        }
+
+
         return JsonString;
     }
 }

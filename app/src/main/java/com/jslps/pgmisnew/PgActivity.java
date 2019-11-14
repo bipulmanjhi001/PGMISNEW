@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import com.jslps.pgmisnew.adapter.PgActivityAdapter;
 import com.jslps.pgmisnew.database.PgActivityModel;
 import com.jslps.pgmisnew.database.PgMeetingtbl;
+import com.jslps.pgmisnew.database.PgPaymentTranstbl;
 import com.jslps.pgmisnew.database.PgReceiptDisData;
 import com.jslps.pgmisnew.database.Pgmemtbl;
 import com.jslps.pgmisnew.database.Pgtbl;
@@ -40,6 +41,7 @@ import com.jslps.pgmisnew.util.GetUrlDownloadMeeting;
 import com.jslps.pgmisnew.util.GetUrlDownloadPaymentMIs;
 import com.jslps.pgmisnew.util.GetUrlDownloadPaymentReceiptDis;
 import com.jslps.pgmisnew.util.GetUrlUploadMeeting;
+import com.jslps.pgmisnew.util.GetUrlUploadPgPaymentTrans;
 import com.jslps.pgmisnew.util.GetUrlUploadSHGANDPG;
 import com.jslps.pgmisnew.util.ManualJsonConvert;
 import com.jslps.pgmisnew.util.VolleyString;
@@ -56,6 +58,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +87,7 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     public static List<Pgmemtbl> pgmemtblList;
     public static List<Shgmemberslocallyaddedtbl> shgmemberslocallyaddedtblList;
     public static List<PgMeetingtbl> pgMeetingtblList;
+    public static List<PgPaymentTranstbl> pgPaymentTranstblList;
     ProgressDialog progress;
     String when;
 
@@ -98,7 +102,6 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     }
 
     private void init() {
-
         /*initialiazation*/
         presenter = new PgActivityPresenter(this, new PgActivityInteractor());
 
@@ -316,8 +319,11 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         pgMeetingtblList = Select.from(PgMeetingtbl.class)
                 .where(Condition.prop("Isxported").eq(0))
                 .list();
+        pgPaymentTranstblList = Select.from(PgPaymentTranstbl.class)
+                .where(Condition.prop("isexported").eq(0))
+                .list();
 
-        if(pgmemtblList.size()>0||shgmemberslocallyaddedtblList.size()>0||pgMeetingtblList.size()>0){
+        if(pgmemtblList.size()>0||shgmemberslocallyaddedtblList.size()>0||pgMeetingtblList.size()>0||pgPaymentTranstblList.size()>0){
           presenter.uploadButtonUnhide();
         }else{
           presenter.uploadButtonHide();
@@ -475,6 +481,26 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         }
     }
 
+    @Override
+    public void callUploadPgPaymentTrans(String json4) {
+        CheckConnectivity checkConnectivity = new CheckConnectivity();
+        if(checkConnectivity.CheckConnection(this)){
+            RequestQueue mRequestQueue;
+            StringRequest mStringRequest;
+            mRequestQueue = Volley.newRequestQueue(this);
+            mStringRequest = new VolleyString(new GetUrlUploadPgPaymentTrans(AppConstant.domain,AppConstant.UploadPGMIS,json4,"PGMIS","").getUrl(),AppConstant.PGPAYMENTTRANS,this).getString();
+            mRequestQueue.add(mStringRequest);
+        }else{
+            new StyleableToast
+                    .Builder(this)
+                    .text(getString(R.string.internet_error))
+                    .iconStart(R.drawable.wrong_icon_white)
+                    .textColor(Color.WHITE)
+                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                    .show();
+        }
+    }
+
     @OnClick(R.id.imageView2)
     public void onViewClicked() {
     }
@@ -482,7 +508,7 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
     @OnClick(R.id.upload)
     public void onViewClicked1() {
 
-        String json1="",json2="",json3="";
+        String json1="",json2="",json3="",json4="";
 
         if(pgmemtblList.size()>0){
             json1 = new ManualJsonConvert("tblProducerGroupMembers").ConvertJson();
@@ -496,6 +522,10 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
             json3 = new ManualJsonConvert("PgMeetingtbl").ConvertJson();
         }
 
+        if(pgPaymentTranstblList.size()>0){
+            json4 = new ManualJsonConvert("tblPGMISTransPaymentReceipt").ConvertJson();
+        }
+
         DialogShow();
         if(pgmemtblList.size()>0||shgmemberslocallyaddedtblList.size()>0){
             presenter.callUploadApi(json2,json1);
@@ -503,6 +533,10 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
 
         if(pgMeetingtblList.size()>0){
             presenter.callUploadApiMeeting(json3);
+        }
+
+        if(pgPaymentTranstblList.size()>0){
+            presenter.callUploadPgPaymentTrans(json4);
         }
 
     }
@@ -641,6 +675,55 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
             }
         }
 
+
+        if(tableIndentifier.equals(AppConstant.PGPAYMENTTRANS)){
+            if(result.equals("[]")){
+                new StyleableToast
+                        .Builder(this)
+                        .text("Upload Failed Due to no Response from server for Pg Payment Trans table")
+                        .iconStart(R.drawable.wrong_icon_white)
+                        .textColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .show();
+                DialogClose();
+            }else{
+
+                if(result.equals("\"1\"")){
+                        if(pgPaymentTranstblList.size()>0){
+                            for(int i=0;i<pgPaymentTranstblList.size();i++){
+                                pgPaymentTranstblList.get(i).setIsexported("1");
+                                pgPaymentTranstblList.get(i).save();
+                            }
+                        }
+
+                        DialogClose();
+                        new StyleableToast
+                                .Builder(this)
+                                .text("Successfully Uploaded")
+                                .iconStart(R.drawable.right)
+                                .textColor(Color.WHITE)
+                                .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                                .show();
+
+
+                        //
+                    presenter.getPgMemberstblandShgMemrtbl();
+
+                    }else{
+                        DialogClose();
+                        new StyleableToast
+                                .Builder(this)
+                                .text("Upload Failed Response is Other than 1")
+                                .iconStart(R.drawable.wrong_icon_white)
+                                .textColor(Color.WHITE)
+                                .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                                .show();
+                    }
+
+
+            }
+        }
+
         if(tableIndentifier.equals(AppConstant.PgMeetingtblDownload)){
             if(result.equals("[]")){
                 new StyleableToast
@@ -755,17 +838,26 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                     }
 
                     for(int j=0;j<jsonArray1.length();j++){
-//                        JSONObject object = jsonArray1.getJSONObject(j);
-//                         String uuid= object.optString("uuid");
-//                         String budgetcode= object.optString("BudgetHeadID");
-//                         String headname= object.optString("");
-//                         String date= object.optString("Date");
-//                         String amount= object.optString("Amt");
-//                         String remark= object.optString("");
-//                         String pgcode= object.optString("");
-//                         String createdby= object.optString("");
-//                         String createdid= object.optString("");
-//                         String isexported= "1";
+                        JSONObject object = jsonArray1.getJSONObject(j);
+                         String uuid= object.optString("uuid");
+                         String budgetcode= object.optString("BudgetHeadID");
+                         String headname=object.optString("Disbursement");
+                         String date= object.optString("Date");
+                         String amount= object.optString("Amt");
+                         String remark= object.optString("Remarks");
+                         String pgcode= object.optString("PGCode");
+                         String createdby= object.optString("Createdby");
+                         String createdid= object.optString("CreatedID");
+                         String isPayment= object.optString("IsPayment");
+                         String paymentmode= object.optString("PMode");
+                         String isexported= "1";
+
+                         if(isPayment.equals("P")){
+                             PgPaymentTranstbl data = new PgPaymentTranstbl(uuid,budgetcode,headname,date,amount,remark,pgcode,createdby,createdid,isexported,paymentmode);
+                             data.save();
+                         }else{
+                             //receipt trans data should be saved
+                         }
                     }
 
 

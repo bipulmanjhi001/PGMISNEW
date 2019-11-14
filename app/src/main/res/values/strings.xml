@@ -89,6 +89,9 @@
     <string name="select_headd">Please Select Head</string>
     <string name="blank_date">Date Can\'t be Blank</string>
     <string name="atleast_one_date">Please Select atleast one date</string>
+    <string name="pg_payment">उत्पादक समूह द्वारा भुगतान</string>
+    <string name="pg_receipt">उत्पादक समूह को प्राप्ति</string>
+    <string name="payment_receipt_report">प्राप्ति भुगतान रिपोर्ट</string>
 
 
     <string-array name="pg_list">
@@ -111,6 +114,12 @@
 
     <string-array name="select_head">
         <item>Select Head Name</item>
+    </string-array>
+
+    <string-array name="select_payment_mode">
+        <item>Select Payment</item>
+        <item>Cash</item>
+        <item>Bank</item>
     </string-array>
 
     <string-array name="select_gender">

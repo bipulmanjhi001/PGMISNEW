@@ -15,13 +15,14 @@ public class PgPaymentTranstbl extends SugarRecord {
     private String createdby;
     private String createdid;
     private String isexported;
+    private String paymentmode;
 
     //here in place of budgetcode budgetid is put,if budgetcode is needed it can be found from TblMstpgPaymentReceipthead
 
     public PgPaymentTranstbl() {
     }
 
-    public PgPaymentTranstbl(String uuid, String budgetcode, String headname, String date, String amount, String remark, String pgcode, String createdby, String createdid,String isexported) {
+    public PgPaymentTranstbl(String uuid, String budgetcode, String headname, String date, String amount, String remark, String pgcode, String createdby, String createdid,String isexported,String paymentmode) {
         this.uuid = uuid;
         this.budgetcode = budgetcode;
         this.headname = headname;
@@ -32,6 +33,15 @@ public class PgPaymentTranstbl extends SugarRecord {
         this.createdby = createdby;
         this.createdid = createdid;
         this.isexported = isexported;
+        this.paymentmode = paymentmode;
+    }
+
+    public String getPaymentmode() {
+        return paymentmode;
+    }
+
+    public void setPaymentmode(String paymentmode) {
+        this.paymentmode = paymentmode;
     }
 
     public String getUuid() {
