@@ -1,15 +1,19 @@
 package com.jslps.pgmisnew;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.ActivityNotFoundException;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -32,13 +36,13 @@ import com.jslps.pgmisnew.presenter.LoginPresenter;
 import com.jslps.pgmisnew.util.AlertView;
 import com.jslps.pgmisnew.util.AppConstant;
 import com.jslps.pgmisnew.util.CheckConnectivity;
-import com.jslps.pgmisnew.util.GetFont;
 import com.jslps.pgmisnew.util.GetUrlLogin;
 import com.jslps.pgmisnew.util.MDMSharedPreference;
 import com.jslps.pgmisnew.util.VersionChecker;
 import com.jslps.pgmisnew.util.VolleyString;
 import com.jslps.pgmisnew.view.LoginView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.zxy.recovery.core.Recovery;
 
 import java.util.concurrent.ExecutionException;
@@ -47,7 +51,6 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 public class LoginActivity extends AppCompatActivity implements LoginView, VolleyString.VolleyListner {
     /*binding views*/
@@ -65,15 +68,18 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
     CheckBox cbRememberMe;
     @BindView(R.id.imageView4)
     ImageView imgLogo;
+    @BindView(R.id.textView86)
+    TextView tvClearAppData;
 
 
     /*Defining objects*/
     LoginPresenter presenter;
     MDMSharedPreference mdmSharedPreference;
 
+
     /*Class Globals*/
     private String versionString;
-    Boolean isPasswordshowing=false;
+    Boolean isPasswordshowing = false;
 
 
     @Override
@@ -88,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
         /*initialiazation*/
         presenter = new LoginPresenter(this, new LoginInteractor());
         mdmSharedPreference = MDMSharedPreference.getInstance(this);
-        
+
         //if application get crashed this is called
         crash();
 
@@ -103,6 +109,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
         presenter.sharedUser();
         presenter.passwordIcon();
         presenter.setFont();
+
+        // Initialize the Prefs class
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
     }
 
     private void crash() {
@@ -183,24 +197,34 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
     @Override
     public void navigateToHome(String when) {
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.right);
-        btnlogin.doneLoadingAnimation(R.color.colorWhite,largeIcon);
-        Intent intent = new Intent(this, PgActivity.class);
-        intent.putExtra("when",when);
-        startActivity(intent);
-        finish();
+        btnlogin.doneLoadingAnimation(R.color.colorWhite, largeIcon);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(LoginActivity.this, PgActivity.class);
+                intent.putExtra("when", when);
+                startActivity(intent);
+                finish();
+
+            }
+        }, 100);
+
+
     }
 
     @Override
     public void setCallLoginApi() {
         CheckConnectivity checkConnectivity = new CheckConnectivity();
-        if(checkConnectivity.CheckConnection(this)){
+        if (checkConnectivity.CheckConnection(this)) {
             RequestQueue mRequestQueue;
             StringRequest mStringRequest;
             mRequestQueue = Volley.newRequestQueue(this);
-            mStringRequest = new VolleyString(new GetUrlLogin(AppConstant.domain,AppConstant.loginMethod,etUsername.getText().toString(),etPassword.getText().toString()).getUrl(),AppConstant.logintbl,this).getString();
+            mStringRequest = new VolleyString(new GetUrlLogin(AppConstant.domain, AppConstant.loginMethod, etUsername.getText().toString(), etPassword.getText().toString()).getUrl(), AppConstant.logintbl, this).getString();
 
             mRequestQueue.add(mStringRequest);
-        }else{
+        } else {
             new StyleableToast
                     .Builder(this)
                     .text(getString(R.string.internet_error))
@@ -296,13 +320,22 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
     private void validateCredentials() {
         //showing progress here
         presenter.showProgress();
-        presenter.validateCredentials(etUsername.getText().toString(), etPassword.getText().toString(), cbRememberMe.isChecked());
+        //delaying time to show the button progress properly
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                presenter.validateCredentials(etUsername.getText().toString(), etPassword.getText().toString(), cbRememberMe.isChecked());
+            }
+        }, 500);
+
     }
 
     @Override
     public void onResponseSuccess(String tableIndentifier, String result) {
-        if(tableIndentifier.equals(AppConstant.logintbl)){
-            if(result.equals("[]")){
+        if (tableIndentifier.equals(AppConstant.logintbl)) {
+            if (result.equals("[]")) {
                 btnlogin.revertAnimation();
                 new StyleableToast
                         .Builder(this)
@@ -311,10 +344,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
                         .textColor(Color.WHITE)
                         .backgroundColor(getResources().getColor(R.color.colorPrimary))
                         .show();
-            }else{
+            } else {
 
 
-                presenter.consumeData(result,etUsername.getText().toString(),etPassword.getText().toString());
+                presenter.consumeData(result, etUsername.getText().toString(), etPassword.getText().toString());
             }
         }
 
@@ -339,19 +372,45 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Volle
     }
 
 
-    private void alert(String error,String message){
+    private void alert(String error, String message) {
         com.irozon.alertview.AlertView alert = new com.irozon.alertview.AlertView(error, message, AlertStyle.DIALOG);
         alert.addAction(new AlertAction(getString(R.string.updateApp), AlertActionStyle.DEFAULT, action -> {
             final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
             try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +appPackageName)));
-            } catch (android.content.ActivityNotFoundException anfe) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" +appPackageName)));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
         }));
         alert.show(LoginActivity.this);
     }
 
 
+    @OnClick(R.id.textView86)
+    public void onViewClickedClear() {
+        com.irozon.alertview.AlertView alert = new com.irozon.alertview.AlertView("WARNING", "All your data which are not uploaded will be lost,and you have to login again as fresh user", AlertStyle.DIALOG);
+        alert.addAction(new AlertAction("OK", AlertActionStyle.DEFAULT, action -> {
+          clearAppData();
 
+        }));
+        alert.addAction(new AlertAction("CANCEL", AlertActionStyle.DEFAULT, action -> {
+        }));
+        alert.show(this);
+    }
+
+    private void clearAppData() {
+        try {
+            // clearing app data
+            if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+                ((ActivityManager)getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData(); // note: it has a return value!
+            } else {
+                String packageName = getApplicationContext().getPackageName();
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec("pm clear "+packageName);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -214,7 +214,7 @@ public class PgReceiptActivity extends AppCompatActivity implements PgReceiptVie
         Collections.reverse(pgReceiptTranstblList);
         aAdapter = new PgReceiptAdapter(this, pgReceiptTranstblList, presenter);
         LinearLayoutManager verticalLayoutmanager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         recylerList.setLayoutManager(verticalLayoutmanager);
         recylerList.setAdapter(aAdapter);
     }

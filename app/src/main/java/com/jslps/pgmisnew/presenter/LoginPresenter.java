@@ -20,7 +20,7 @@ public class LoginPresenter implements LoginInteractor.OnLoginFinishedListener {
 
         loginInteractor.login(username, password,isCheck, this);
         //temporarily this is commented
-       // loginInteractor.versionCheck(this);
+
     }
 
 
@@ -87,6 +87,8 @@ public class LoginPresenter implements LoginInteractor.OnLoginFinishedListener {
 
     public void sharedUser(){
         loginView.setUser();
+        loginInteractor.versionCheck(this);
+
     }
 
     public void passwordIcon(){

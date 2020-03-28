@@ -153,7 +153,7 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
         PgActivityModel item = listPgActivity.get(adapterPostion);
 
         //this should be 1 instead of 6
-        if (item.getId1() == 6) {
+        if (item.getId1() == 1) {
             viewLayout.setVisibility(View.VISIBLE);
         } else {
             viewLayout.setVisibility(View.GONE);
@@ -166,14 +166,18 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
 
 
         //for temporary basis and should be removed
-        if(item.getId1()==1||item.getId2()==2||item.getId1()==3||item.getId2()==4||item.getId2()==8){
-            layout1.setVisibility(View.GONE);
-            layout2.setVisibility(View.GONE);
-        }
+//        if(item.getId1()==1||item.getId2()==2||item.getId1()==3||item.getId2()==4||item.getId2()==8){
+//            layout1.setVisibility(View.GONE);
+//            layout2.setVisibility(View.GONE);
+//        }
+//
+//        if(item.getId1()==7){
+//            layout1.setVisibility(View.VISIBLE);
+//        }
 
-        if(item.getId1()==7){
-            layout1.setVisibility(View.VISIBLE);
-        }
+//        if(item.getId2()==8){
+//            layout2.setVisibility(View.GONE);
+//        }
 
 
 
@@ -202,6 +206,10 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                             startActivity(intent);
                         } else if(item.getId1() == 7){
                             Intent intent = new Intent(PgActivity.this, PgPaymentReceiptReport.class);
+                            startActivity(intent);
+                        }  else if(item.getId1() == 9){
+                            Intent intent = new Intent(PgActivity.this, LoanMembersDetail.class);
+                            intent.putExtra("fromactivity","loan");
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(PgActivity.this, Test.class);
@@ -239,6 +247,13 @@ public class PgActivity extends AppCompatActivity implements PgActivityView, Vol
                             startActivity(intent);
                         }else if (item.getId2() == 6) {
                             Intent intent = new Intent(PgActivity.this, PgReceiptActivity.class);
+                            startActivity(intent);
+                        }else if (item.getId2() == 8) {
+                            Intent intent = new Intent(PgActivity.this, StockPurchase.class);
+                            startActivity(intent);
+                        }else if (item.getId2() == 10) {
+                            Intent intent = new Intent(PgActivity.this, LoanMembersDetail.class);
+                            intent.putExtra("fromactivity","repayment");
                             startActivity(intent);
                         }  else {
                             Intent intent = new Intent(PgActivity.this, Test.class);

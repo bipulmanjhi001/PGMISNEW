@@ -147,6 +147,7 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
     List<PgPaymentTranstbl> pgPaymentTranstblList;
     List<PgPaymentTranstbl> pgPaymentTranstblListSum;
     List<PaymentReceiptReportModel> paymentReceiptReportModelList = new ArrayList<>();
+    public static List<PaymentReceiptReportModel> pdfGenerateList = new ArrayList<>();
     List<PaymentReceiptReportModel> paymentReceiptReportModelListNotMatched;
     PgPaymentReceiptReportAdapter aAdapter;
     List<String> budgetidreportfinallist;
@@ -231,19 +232,27 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
             case R.id.imageView22:
                 String dateFrom = textView82.getText().toString();
                 String dateTo = textView84.getText().toString();
-                if ((dateFrom.equals("Select Date") && dateTo.equals("Select Date"))||paymentReceiptReportModelList.size()==0) {
+                if ((dateFrom.equals("Select Date") && dateTo.equals("Select Date"))||pdfGenerateList.size()==0) {
                     Toast.makeText(PgPaymentReceiptReport.this,"Please see report first",Toast.LENGTH_SHORT).show();
 
 
                 }else{
-                    if (!hasPermissions(this, PERMISSIONS)) {
+
+                    if (!hasPermissions(PgPaymentReceiptReport.this, PERMISSIONS)) {
                         ActivityCompat
                                 .requestPermissions(this, PERMISSIONS, 1);
 
                     }else{
                         //generate pdf here
-                        generatePDF(recylerList,dateFrom,dateTo);
+                        Intent intent = new Intent(this,GeneratePdfActivity.class);
+                        intent.putExtra("from",dateFrom);
+                        intent.putExtra("to",dateTo);
+                        startActivity(intent);
                     }
+
+
+
+
                 }
                 break;
 
@@ -342,13 +351,15 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
     @Override
     public void getReport() {
         paymentReceiptReportModelList = new ArrayList<>();
+        pdfGenerateList = new ArrayList<>();
+
         //adding first model to report list for pdf heading display
         PaymentReceiptReportModel model0 = new PaymentReceiptReportModel();
         model0.setHeadname("Head");
         model0.setReceivedamount("ReceivedAmt");
         model0.setPaymentamount("PaymentAmt");
         model0.setBalance("Balance");
-        paymentReceiptReportModelList.add(model0);
+        pdfGenerateList.add(model0);
 
         paymentReceiptReportModelListNotMatched = new ArrayList<>();
         double receivedAmounttotal = 0;
@@ -375,6 +386,7 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
 
                     model.setBalance(balance + "");
                     paymentReceiptReportModelList.add(model);
+                    pdfGenerateList.add(model);
                     isMatched2 = true;
                     j = pgPaymentTranstblListSum.size();
                 }
@@ -396,6 +408,8 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
 
 
         paymentReceiptReportModelList.addAll(paymentReceiptReportModelListNotMatched);
+        pdfGenerateList.addAll(paymentReceiptReportModelListNotMatched);
+
         //showing payments whose receipt is not present
         budgetidreportfinallist = new ArrayList<>();
         for(int a=0;a<paymentReceiptReportModelList.size();a++){
@@ -416,6 +430,7 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
                  paymentAmounttotal = paymentAmounttotal + Double.parseDouble(pgPaymentTranstblListSum.get(k).getAmount());
                  balanceAmounttotal = balanceAmounttotal + balance;
                  paymentReceiptReportModelList.add(model);
+                 pdfGenerateList.add(model);
              }
 
         }
@@ -428,7 +443,7 @@ public class PgPaymentReceiptReport extends AppCompatActivity implements Payment
         model.setReceivedamount(receivedAmounttotal+"");
         model.setPaymentamount(paymentAmounttotal+"");
         model.setBalance(balanceAmounttotal+"");
-        paymentReceiptReportModelList.add(model);
+        pdfGenerateList.add(model);
 
 
         aAdapter = new PgPaymentReceiptReportAdapter(this, paymentReceiptReportModelList);

@@ -8,22 +8,29 @@ import com.jslps.pgmisnew.database.Districttbl;
 import com.jslps.pgmisnew.database.Logintbl;
 import com.jslps.pgmisnew.database.PgMeetingtbl;
 import com.jslps.pgmisnew.database.PgPaymentTranstbl;
+import com.jslps.pgmisnew.database.PgReceiptDisData;
 import com.jslps.pgmisnew.database.Pgmemtbl;
+import com.jslps.pgmisnew.database.Pgmisstockmsttbl;
 import com.jslps.pgmisnew.database.Pgtbl;
 import com.jslps.pgmisnew.database.Shgmemberslocallyaddedtbl;
 import com.jslps.pgmisnew.database.Shgmemnonpg;
 import com.jslps.pgmisnew.database.Shgtbl;
+import com.jslps.pgmisnew.database.TblMstPgPaymentReceipthead;
 import com.jslps.pgmisnew.database.Villagetbl;
 import com.jslps.pgmisnew.util.CheckConnectivity;
 import com.jslps.pgmisnew.util.EncryptClass;
+import com.jslps.pgmisnew.util.GetCurrentDate;
+import com.jslps.pgmisnew.util.SeedDataStock;
 import com.orm.query.Condition;
 import com.orm.query.Select;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class LoginInteractor {
 
@@ -94,6 +101,8 @@ public class LoginInteractor {
             PgMeetingtbl.deleteAll(PgMeetingtbl.class);
             Shgmemberslocallyaddedtbl.deleteAll(Shgmemberslocallyaddedtbl.class);
             PgPaymentTranstbl.deleteAll(PgPaymentTranstbl.class);
+            TblMstPgPaymentReceipthead.deleteAll(TblMstPgPaymentReceipthead.class);
+            PgReceiptDisData.deleteAll(PgReceiptDisData.class);
 
             for(int i=0;i<mainArray.length();i++){
                 JSONObject districtObject = mainArray.getJSONObject(i);
@@ -247,7 +256,22 @@ public class LoginInteractor {
                 }
             }
 
+            // storing master data
+
+            if(Prefs.getString("firstlogin","").equals("")){
+                for(int i = 0; i< SeedDataStock.getListData().size(); i++){
+                    Pgmisstockmsttbl datastock = new Pgmisstockmsttbl(UUID.randomUUID().toString(),SeedDataStock.getListData().get(i).getItemcode(),SeedDataStock.getListData().get(i).getItemname(),new GetCurrentDate().getDate(),username);
+                    datastock.save();
+                }
+
+
+            }
+
+            Prefs.putString("firstlogin","done");
+
+
             //new activity here
+
             listener.moveToNextActivity("first");
 
         }catch (Exception e){

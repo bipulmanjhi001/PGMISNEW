@@ -116,8 +116,22 @@
         <item>Select Head Name</item>
     </string-array>
 
+    <string-array name="select_member">
+        <item>Select Member Name</item>
+    </string-array>
+
+    <string-array name="select_stock_item">
+        <item>Select Item Name</item>
+    </string-array>
+
+    <string-array name="select_unit">
+        <item><font fgcolor='#FF8E8E93'>Select Unit</font></item>
+        <item>Kg</item>
+        <item>gram</item>
+    </string-array>
+
     <string-array name="select_payment_mode">
-        <item>Select Payment</item>
+        <item><font fgcolor='#FF8E8E93'>Select Payment</font></item>
         <item>Cash</item>
         <item>Bank</item>
     </string-array>

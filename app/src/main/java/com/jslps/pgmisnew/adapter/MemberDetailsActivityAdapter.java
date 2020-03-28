@@ -117,7 +117,7 @@ public class MemberDetailsActivityAdapter extends RecyclerView.Adapter<MemberDet
             list.addAll(newItemList);
         } else {
             for (Pgmemtbl dd : newItemList) {
-                if(dd.getMembername()!=null){
+                if(dd.getMembername()!=null && dd.getGrpname()!=null){
                     if (dd.getMembername().toLowerCase(Locale.getDefault())
                             .contains(charText)||dd.getGrpname().toLowerCase(Locale.getDefault())
                             .contains(charText)) {

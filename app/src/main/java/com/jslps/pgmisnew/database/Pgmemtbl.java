@@ -199,4 +199,9 @@ public class Pgmemtbl extends SugarRecord {
     public void setMembername(String membername) {
         Membername = membername;
     }
+
+    @Override
+    public String toString() {
+        return Membername+"("+Grpname+")";
+    }
 }
